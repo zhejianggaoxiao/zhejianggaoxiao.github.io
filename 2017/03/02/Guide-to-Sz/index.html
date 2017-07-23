@@ -1,0 +1,1262 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="sz," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="这篇文档内容主要对sz数据压缩函数库进行一个简单的介绍，同时对相关的函数接口也做一定的介绍。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Guide to Sz">
+<meta property="og:url" content="http://yoursite.com/2017/03/02/Guide-to-Sz/index.html">
+<meta property="og:site_name" content="Who are you?">
+<meta property="og:description" content="这篇文档内容主要对sz数据压缩函数库进行一个简单的介绍，同时对相关的函数接口也做一定的介绍。">
+<meta property="og:updated_time" content="2017-03-04T15:11:21.786Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Guide to Sz">
+<meta name="twitter:description" content="这篇文档内容主要对sz数据压缩函数库进行一个简单的介绍，同时对相关的函数接口也做一定的介绍。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6384644433400301000',
+      author: 'xoaG'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/02/Guide-to-Sz/"/>
+
+
+
+
+
+  <title> Guide to Sz | Who are you? </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a7a0c4c8a6ef4131e469f6d4b9dd315c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Who are you?</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Why are you ?</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/02/Guide-to-Sz/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Gaox">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar/boy.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Who are you?">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Who are you?" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Guide to Sz
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-02T06:53:34+08:00">
+                2017-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/data-compress/" itemprop="url" rel="index">
+                    <span itemprop="name">data compress</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/02/Guide-to-Sz/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/02/Guide-to-Sz/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/03/02/Guide-to-Sz/" class="leancloud_visitors" data-flag-title="Guide to Sz">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇文档内容主要对sz数据压缩函数库进行一个简单的介绍，同时对相关的函数接口也做一定的介绍。</p>
+<a id="more"></a>
+<p>[TOC]</p>
+<h1 id="sz-是什么"><a href="#sz-是什么" class="headerlink" title="sz 是什么"></a>sz 是什么</h1><p>sz，全称为Squeeze，是一种以误差限定方式（error-bounded）来进行数据压缩的方法。它可以大幅度降低数据的存储量，同时保证解压后的数据与原数据误差在我们限定的范围内。</p>
+<ul>
+<li>sz可以被用来压缩不同类型的数据（主要针对的是单精度和双精度型数据），并且适用于高维数组（目前最高支持维度为5维）；</li>
+<li>sz十分易于使用，它提供了三种编程语言的接口：Fortran，C，以及Java（Java版本在最近的几个高版本中没有继续更新）；</li>
+<li>sz支持不同架构的处理器，包括x86_32位，x86_64位，ARM，SOLARIS，以及IBM BlueGene 系列。</li>
+<li>sz支持通过设定不同的误差方式来压缩数据，我们可以在sz.config中写明或是通过函数接口传入相关参数，关于误差方式这一部分可以参见<a href="https://zhejianggaoxiao.github.io/2017/03/02/sz%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">sz配置文件详解</a>；</li>
+<li>如果我们有许多变量需要压缩，我们可以采用（作者推荐采用）批压缩方式；</li>
+<li>这是作者<a href="http://www.mcs.anl.gov/~shdi/" target="_blank" rel="external">个人主页</a></li>
+</ul>
+<h1 id="如何安装SZ"><a href="#如何安装SZ" class="headerlink" title="如何安装SZ"></a>如何安装SZ</h1><p>首先，我们可以从<a href="http://collab.mcs.anl.gov/display/ESR/SZ" target="_blank" rel="external">这个页面</a>下载到sz的源码，作者一直在更新当中。</p>
+<p>执行安装步骤如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">configure --prefix=[INSTALL_DIR]</div><div class="line">make</div><div class="line">make install</div></pre></td></tr></table></figure>
+<p>我们可以在[INSTALL_DIR]中找到相关的头文件include/以及链接库lib/，我们可以将其加入到相关路劲中，如<code>C_INCLUDE_PATH</code>，至于链接库，可以在编译的时候直接指定。</p>
+<p><strong>注意</strong>：在MAC OS上直接按照上述步骤安装会报错，解决方法是通过homebrew安装一个gcc，然后利用这个gcc来进行编译。原因在与MAC自带的gcc实质调用的是clang编译器，而非真正的gcc编译器。</p>
+<h1 id="快速上手"><a href="#快速上手" class="headerlink" title="快速上手"></a>快速上手</h1><p>我们可以在[sz_package]/example/中找到相关测试用例，若只想测试是否安装成功，可以直接运行<code>test.sh</code>这一脚本。</p>
+<h2 id="压缩实现"><a href="#压缩实现" class="headerlink" title="压缩实现"></a>压缩实现</h2><p>命令格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># 基本命令格式：</div><div class="line"># ./cmd [sz config file] [data] [r1] [r2] [r3] ...</div><div class="line"></div><div class="line"># 3d数据</div><div class="line">./testdouble_compress sz.config testdouble_8_8_128.dat 8 8 128</div><div class="line"># 4d数据</div><div class="line">./testdouble_compress sz.config testdouble_8_8_8_128.dat 8 8 8 128</div><div class="line"></div><div class="line">./testfloat_compress sz.config testfloat_8_8_128.dat 8 8 128</div></pre></td></tr></table></figure>
+<h2 id="解压缩实现"><a href="#解压缩实现" class="headerlink" title="解压缩实现"></a>解压缩实现</h2><p>命令格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># 基本命令格式：</div><div class="line"># ./cmd [sz config file] [data] [r1] [r2] [r3] ...</div><div class="line"></div><div class="line"># 3d</div><div class="line">./testdouble_decompress sz.config testdouble_8_8_128.dat.sz 8 8 128</div><div class="line"># 4d</div><div class="line">./testdouble_decompress sz.config testdouble_8_8_8_128.dat.sz 8 8 8 128</div><div class="line"></div><div class="line">./testfloat_decompress sz.config testfloat_8_8_128.dat.sz 8 8 128</div></pre></td></tr></table></figure>
+<p>在解压缩过程中，我们不需要提供误差限定信息，因为这些信息已经包含在了解压缩数据流中了。</p>
+<h1 id="API接口"><a href="#API接口" class="headerlink" title="API接口"></a>API接口</h1><p>sz提供两种应用程序接口——C和Fortran（在SZ-0.x版本中还提供了Java接口）。这些接口在不同编程语言中是相近的，但是也存在一些不同，如在C中，我们需要声明数据类型（SZ_FLOAT或是SZ_DOUBLE），但是在Fortran接口中不需要这个参数。</p>
+<p>关键的三个接口：</p>
+<ul>
+<li>SZ_Init()：初始化压缩或是解压缩</li>
+<li>SZ_compress()/SZ_decompress()：压缩数据或是解压缩数据</li>
+<li>SZ_Finalize()：结束压缩</li>
+</ul>
+<h2 id="C压缩与解压缩接口"><a href="#C压缩与解压缩接口" class="headerlink" title="C压缩与解压缩接口"></a>C压缩与解压缩接口</h2><ol>
+<li><p><strong>SZ_Init and SZ_Init_Params</strong></p>
+<p>作用：初始化压缩。在对多个变量进行压缩过程中，SZ_Init()只需被调用一次。</p>
+<p>原型：<code>void SZ_Init(char *configFilePath);</code></p>
+<p>参数：</p>
+<ul>
+<li>configFilePath：配置文件路径，一般我们都是直接将配置文件与程序放在同一文件夹下，进而路径只需要填写配置文件的文件名即可(such as example/sz.config)</li>
+</ul>
+<p>返回：none</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 另一个用于初始化的函数，但是不常用 */</span></div><div class="line">Synopsis: <span class="function"><span class="keyword">void</span> <span class="title">SZ_Init_Params</span><span class="params">(sz_params * params)</span></span>;</div><div class="line">Input: params the configuration variable that contains the initialization information.</div><div class="line">Return: none.</div><div class="line">zz_params data structure:</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> sz_params</div><div class="line">&#123;</div><div class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> quantization_intervals; <span class="comment">//default value: 0</span></div><div class="line"><span class="keyword">int</span> dataEndianType; <span class="comment">//what is the endian type of the original data set?</span></div><div class="line"><span class="keyword">int</span> sysEndianType; <span class="comment">//sysEndianType can be ignored, because it can be</span></div><div class="line">detected autumnally by our compressor based on the system architectures.</div><div class="line"><span class="keyword">int</span> sol_ID; <span class="comment">//default value: #define SZ 101</span></div><div class="line"><span class="keyword">int</span> layers; <span class="comment">//default value: 1</span></div><div class="line"><span class="keyword">int</span> sampleDistance; <span class="comment">//default value: 50</span></div><div class="line"><span class="keyword">float</span> preThreshold; <span class="comment">//default value: 0.97</span></div><div class="line"><span class="keyword">int</span> offset; <span class="comment">//default value: 0</span></div><div class="line"><span class="keyword">int</span> szMode; <span class="comment">//default value: #define SZ_BEST_COMPRESSION 1</span></div><div class="line"><span class="keyword">int</span> gzipMode; <span class="comment">//default value: Gzip_BEST_SPEED</span></div><div class="line"><span class="keyword">int</span> errorBoundMode; <span class="comment">//4 options: ABS, REL, ABS_AND_REL, ABS_OR_REL</span></div><div class="line"><span class="keyword">double</span> absErrBound; <span class="comment">//example: 0.0001</span></div><div class="line"><span class="keyword">double</span> relBoundRatio; <span class="comment">//example: 0.001</span></div><div class="line">&#125; sz_params;</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>SZ_compress</strong></p>
+<p>作用：用于压缩浮点数数组。我们可以采用两类压缩接口（3种函数接口）来实现数据压缩。</p>
+<p>原型：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 第一类第一种 </span></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">SZ_compress</span><span class="params">(<span class="keyword">int</span> dataType, <span class="keyword">void</span> *data, <span class="keyword">int</span> *outSize, <span class="keyword">int</span> r5, <span class="keyword">int</span> r4, <span class="keyword">int</span> r3, <span class="keyword">int</span> r2,</span></span></div><div class="line"><span class="keyword">int</span> r1);</div><div class="line"><span class="comment">// 第二类第一种</span></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">SZ_compress_args</span><span class="params">(<span class="keyword">int</span> dataType, <span class="keyword">void</span> *data, <span class="keyword">int</span> *outSize,<span class="keyword">int</span> errBoundMode, <span class="keyword">double</span> absErrBound, <span class="keyword">double</span> relBoundRatio,<span class="keyword">int</span> r5, <span class="keyword">int</span> r4, <span class="keyword">int</span> r3, <span class="keyword">int</span> r2, <span class="keyword">int</span> r1)</span></span>;</div><div class="line"><span class="comment">// 第二类第二种</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">SZ_compress_args2</span><span class="params">(<span class="keyword">int</span> dataType, <span class="keyword">void</span> data, <span class="keyword">char</span> compressed_bytes,<span class="keyword">int</span> *outSize,<span class="keyword">int</span> errBoundMode, <span class="keyword">double</span> absErrBound, <span class="keyword">double</span> relBoundRatio,<span class="keyword">int</span> r5, <span class="keyword">int</span> r4, <span class="keyword">int</span> r3, <span class="keyword">int</span> r2, <span class="keyword">int</span> r1)</span></span>;</div></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li>datatype：数据类型，有两种选择SZ_FLOAT或是SZ_DOUBLE</li>
+<li>data：将要被压缩的数组指针，从原型中可以看出，数组指针为一维指针，因而我们只能将一维数组传递过去。在<code>testdouble_compress.c</code>中，程序先是从二进制文件中读取数据，然后讲相关数据指针传递给data，但是在实际编程过程中，我们可以直接将内存中的一维数组指针传给data，不需要额外进行转换（作者转换的原因是考虑到了不同机器编码方式不同）</li>
+<li>compressed_bytes：用于存放压缩后数据的内存空间</li>
+<li>outSize：压缩后数据流的大小（单位为字节）</li>
+<li>r[1-5]：分别对应[1-5]维的维度，若是维数不到5维，则不到的维度数值为0</li>
+</ul>
+<p>返回：压缩数据流（以字节计）</p>
+</li>
+<li><p><strong>SZ_decompress</strong></p>
+<p>作用：解压缩数据，我们可以有两类接口用于解压</p>
+<p>原型：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//第一类</span></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">SZ_decompress</span><span class="params">(<span class="keyword">int</span> dataType, <span class="keyword">char</span> *bytes, <span class="keyword">int</span> byteLength,<span class="keyword">int</span> r5, <span class="keyword">int</span> r4, <span class="keyword">int</span> r3, <span class="keyword">int</span> r2, <span class="keyword">int</span> r1)</span></span>;</div><div class="line"><span class="comment">//第二类</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">SZ_decompress_args</span><span class="params">(<span class="keyword">int</span> dataType, <span class="keyword">char</span> *bytes, <span class="keyword">int</span> byteLength,<span class="keyword">void</span>* decompressed_array,<span class="keyword">int</span> r5, <span class="keyword">int</span> r4, <span class="keyword">int</span> r3, <span class="keyword">int</span> r2, <span class="keyword">int</span> r1)</span></span>;</div></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li>datatype：同上</li>
+<li>bytes：将要被解压的压缩数据流</li>
+<li>byteLength：压缩数据流的长度</li>
+<li>decompressed_array：用于存储被解压后的数据地址</li>
+<li>r[1-5]：同上</li>
+</ul>
+<p>返回：解压后的数据流</p>
+</li>
+<li><p><strong>SZ_batchAddVar</strong></p>
+<p>作用：将某一变量以批处理的方式和其他变量一起进行压缩</p>
+<p>原型：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">SZ_batchAddVar</span><span class="params">(<span class="keyword">char</span>* varName, <span class="keyword">int</span> dataType, <span class="keyword">void</span>* var,<span class="keyword">int</span> r5, <span class="keyword">int</span> r4, <span class="keyword">int</span> r3, <span class="keyword">int</span> r2, <span class="keyword">int</span> r1,<span class="keyword">int</span> errBoundMode, <span class="keyword">double</span> absErrBound, <span class="keyword">double</span> relBoundRatio)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>SZ_batchDelVar</strong></p>
+<p>作用：将某一个变量从要压缩列表中删除</p>
+<p>原型：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">SZ_batchDelVar</span><span class="params">(<span class="keyword">char</span>* varName)</span></span>;</div></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li>varName：不进行批压缩的变量</li>
+</ul>
+<p>返回：0-成功；1-没用找到相应的变量</p>
+</li>
+<li><p><strong>SZ_batch_compress</strong></p>
+<p>作用：以批处理的方式压缩数据，所有声明要批处理压缩的数据会一起进行压缩（好处是提高了压缩率）</p>
+<p>原型：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">char* SZ_batch_compress(int *outSize);</div></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li>outSize：压缩后的数据流（以字节计）</li>
+</ul>
+<p>返回：压缩后的数据流</p>
+</li>
+<li><p><strong>SZ_batch_decompress</strong></p>
+<p>作用：解压缩进行批压缩的数据流</p>
+<p>原型：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function">SZ_VarSet* <span class="title">SZ_batch_decompress</span> <span class="params">(<span class="keyword">char</span>* compressedStream,<span class="keyword">int</span> compressedLength)</span></span>;</div></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li>compressedStream：被批压缩的数据流</li>
+<li>compressedLength：被批压缩的数据流的长度（以字节计）</li>
+</ul>
+<p>返回：包含有多个变量的解压缩后的数据结构体，可以参见<code>VarSet.h</code>查看更多细节。全局的SZ_VarSet定义在sz.h中。</p>
+</li>
+<li><p><strong>SZ_Finalize</strong></p>
+<p>作用：释放内存以及结束压缩环境</p>
+<p>原型：<code>int SZ_Finalize();</code></p>
+<p>参数：none</p>
+<p>返回：none</p>
+</li>
+</ol>
+<h2 id="Fortran压缩与解压缩接口"><a href="#Fortran压缩与解压缩接口" class="headerlink" title="Fortran压缩与解压缩接口"></a>Fortran压缩与解压缩接口</h2><ol>
+<li><p><strong>SZ_Init</strong></p>
+<p>作用：同 C</p>
+<p>原型：<code>SZ_Init(configFilePath, ierr);</code></p>
+<p>参数：</p>
+<ul>
+<li>configFilePath：in，配置文件路径，定义方式为：<code>CHARACTER(len=32) :: configFilePath</code></li>
+<li>ierr：out，成功返回0，失败返回1，定义方式为：<code>INTEGER(Kind=4) :: ierr</code></li>
+</ul>
+</li>
+<li><p><strong>SZ_Compress</strong></p>
+<p>作用：同 C</p>
+<p>原型：</p>
+<ul>
+<li><p><code>SZ_compress(data, bytes, outSize);</code></p>
+<p>参数：</p>
+<ul>
+<li>data：in，将要被压缩的数组数据，定义方式为：<code>REAL(KIND=8), DIMENSION(:,:,:) ::data</code></li>
+<li>bytes：out，压缩之后的字节流，定义方式为：<code>INTEGER(kind=1), DIMENSION(:), allocatable :: bytes</code></li>
+<li>outsize：out，字节流大小（以字节计），定义方式为：<code>INTEGER(kind=4) :: OutSize</code></li>
+</ul>
+</li>
+<li><p><code>SZ_Compress (data, bytes, outSize,errBoundMode, absErrBound, relBoundRatio);</code></p>
+<p>参数：</p>
+<ul>
+<li>errBoundMode：in，误差限定模式，可以取值为：ABS, REL, ABS_AND_REL, ABS_OR_REL，定义方式为：<code>INTEGER(kind=4) :: ErrBoundMode</code></li>
+<li>absErrBound：in，绝对误差数值，定义方式为：<code>REAL(kind=4 or 8) :: absErrBound</code></li>
+<li>relBoundRatio：in，相对误差数值，定义方式为：<code>REAL(kind=4 or 8) :: relBoundRatio</code>，关于误差限定的详细内容可以参见上面</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>SZ_Decompress</strong></p>
+<p>作用：同 C</p>
+<p>原型：<code>SZ_Decompress(bytes, data, [r1,r2,…])</code></p>
+<p>参数：</p>
+<ul>
+<li>bytes：in，要被解压缩的压缩数据流，定义方式为：<code>INTEGER(kind=1), DIMENSION(:) :: Bytes</code></li>
+<li>data：out，解压后的数据，定义方式为：<code>REAL(KIND=4 or 8), DIMENSION(:,:,…:,:), allocatable :: data</code></li>
+<li>r[1-5]：in，分别对应[1-5]维的数据维度，若维数不到5维，则不到的维度赋值为0，定义方式：<code>INTEGER(kind=4) :: r1[, r2, r3, r4, r5]</code>，也可以在接口中不填入没有数值的维度，如3维只填3个维度数值</li>
+</ul>
+</li>
+<li><p><strong>SZ_BatchAddVar</strong></p>
+<p>作用：同 C</p>
+<p>原型：<code>void SZ_batchAddVar(varName, var,errBoundMode, absErrBound, relBoundRatio);</code></p>
+<p>参数：</p>
+<ul>
+<li>varName：in，将要进行批处理压缩的变量的名字，定义方式为：<code>CHARACTER(len=128) :: varName</code></li>
+<li>var：in，将要进行批处理压缩的变量</li>
+<li>errBoundMode：in，误差限定模式，可选：ABS, REL, ABS_AND_REL, ABS_OR_REL，定义方式为：<code>INTEGER(kind=4) :: ErrBoundMode</code></li>
+<li>absErrBound：in，绝对误差数值，定义方式为：<code>REAL(kind=4 or 8) :: absErrBound</code></li>
+<li>relBoundRatio：in，相对误差数值，定义方式为：`REAL(kind=4 or 8) :: relBoundRatio</li>
+</ul>
+</li>
+<li><p><strong>SZ_BatchDelVar</strong></p>
+<p>作用：同 C</p>
+<p>原型：<code>void SZ_batchDelVar(varName, ierr);</code></p>
+<p>参数：</p>
+<ul>
+<li>varName：in，将要被删除的变量名，定义方式：<code>CHARACTER(len=128) :: varName</code></li>
+<li>ierr：out，成功返回0，没有找到相应变量返回1，定义方式：<code>INTEGER(kind=4) :: ierr</code></li>
+</ul>
+</li>
+<li><p><strong>SZ_Batch_Compress</strong></p>
+<p>作用：同 C</p>
+<p>原型：<code>void SZ_Batch_Compress(bytes, outSize)</code></p>
+<p>参数：</p>
+<ul>
+<li>bytes：out，压缩后产生的数据流，定义方式为：<code>INTEGER(kind=1), DIMENSION(:), allocatable :: bytes</code></li>
+<li>outsize：out，压缩后数据流的大小（以字节计），定义方式为：<code>INTEGER(kind=4) :: OutSize</code></li>
+</ul>
+</li>
+<li><p><strong>SZ_Batch_Decompress</strong></p>
+<p>作用：同 C</p>
+<p>原型：<code>void SZ_Batch_Decompress(bytes, outSize)</code></p>
+<p>参数：</p>
+<ul>
+<li>bytes：in，将要被解压缩的数据流，定义方式为：<code>INTEGER(kind=1), DIMENSION(:) :: Bytes</code></li>
+<li>outsize：in，解压后数据流大小，定义方式为：<code>INTEGER(kind=4) :: OutSize</code></li>
+</ul>
+</li>
+<li><p><strong>SZ_Finalize</strong></p>
+<p>作用：同 C</p>
+<p>原型：<code>SZ_Finalize();</code></p>
+<p>参数：none</p>
+<p>返回：none</p>
+</li>
+</ol>
+<p>参考：</p>
+<ul>
+<li>[SZ_package]/doc/sz-1.4-user-guide.pdf</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sz/" rel="tag"># sz</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/24/Ubuntu倒腾记/" rel="next" title="Ubuntu倒腾记～">
+                <i class="fa fa-chevron-left"></i> Ubuntu倒腾记～
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/02/sz配置文件详解/" rel="prev" title="sz配置文件详解">
+                sz配置文件详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/03/02/Guide-to-Sz/"
+     data-title="Guide to Sz"
+     data-content=""
+     data-url="http://yoursite.com/2017/03/02/Guide-to-Sz/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/02/Guide-to-Sz/"
+           data-title="Guide to Sz" data-url="http://yoursite.com/2017/03/02/Guide-to-Sz/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar/boy.png"
+               alt="Gaox" />
+          <p class="site-author-name" itemprop="name">Gaox</p>
+          <p class="site-description motion-element" itemprop="description">这是一个小子的个人blog，嗯，没啥会的~</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhejianggaoxiao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://zhihu.com/people/zhejianggaoxiao" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/zhejiangblue" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://music.163.com/#/user/home?id=35617743" target="_blank" title="网易云">
+                  
+                    <i class="fa fa-fw fa-music"></i>
+                  
+                  网易云
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#sz-是什么"><span class="nav-number">1.</span> <span class="nav-text">sz 是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何安装SZ"><span class="nav-number">2.</span> <span class="nav-text">如何安装SZ</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#快速上手"><span class="nav-number">3.</span> <span class="nav-text">快速上手</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#压缩实现"><span class="nav-number">3.1.</span> <span class="nav-text">压缩实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解压缩实现"><span class="nav-number">3.2.</span> <span class="nav-text">解压缩实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#API接口"><span class="nav-number">4.</span> <span class="nav-text">API接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C压缩与解压缩接口"><span class="nav-number">4.1.</span> <span class="nav-text">C压缩与解压缩接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fortran压缩与解压缩接口"><span class="nav-number">4.2.</span> <span class="nav-text">Fortran压缩与解压缩接口</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gaox</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zhejiangblue"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('footer')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js?v=5.1.0"></script>
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OhVoAvGprlcQcE874iz42HN5-gzGzoHsz", "HYUlzEMlDdpDTLpJ4Ll67Daj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

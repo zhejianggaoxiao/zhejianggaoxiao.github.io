@@ -1,0 +1,1142 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="C/C++," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="最近在看IJG JPEG函数库的一些代码时发现开发者在程序中用了许多的预处理命令，加之以前就遇到过好多次但是一直没有花时间去学习，就趁这次机会好好的学习一下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C/C++预处理指令">
+<meta property="og:url" content="http://yoursite.com/2017/02/09/C-C-预处理指令/index.html">
+<meta property="og:site_name" content="Who are you?">
+<meta property="og:description" content="最近在看IJG JPEG函数库的一些代码时发现开发者在程序中用了许多的预处理命令，加之以前就遇到过好多次但是一直没有花时间去学习，就趁这次机会好好的学习一下。">
+<meta property="og:updated_time" content="2017-02-09T12:35:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C/C++预处理指令">
+<meta name="twitter:description" content="最近在看IJG JPEG函数库的一些代码时发现开发者在程序中用了许多的预处理命令，加之以前就遇到过好多次但是一直没有花时间去学习，就趁这次机会好好的学习一下。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6384644433400301000',
+      author: 'xoaG'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/02/09/C-C-预处理指令/"/>
+
+
+
+
+
+  <title> C/C++预处理指令 | Who are you? </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a7a0c4c8a6ef4131e469f6d4b9dd315c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Who are you?</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Why are you ?</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/09/C-C-预处理指令/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Gaox">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar/boy.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Who are you?">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Who are you?" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                C/C++预处理指令
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-09T19:58:24+08:00">
+                2017-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Study/" itemprop="url" rel="index">
+                    <span itemprop="name">Study</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/09/C-C-预处理指令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/09/C-C-预处理指令/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/09/C-C-预处理指令/" class="leancloud_visitors" data-flag-title="C/C++预处理指令">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近在看IJG JPEG函数库的一些代码时发现开发者在程序中用了许多的预处理命令，加之以前就遇到过好多次但是一直没有花时间去学习，就趁这次机会好好的学习一下。</p>
+<a id="more"></a>
+<p>本文主要记录一些常用的C/C++预处理指令并对其用法进行简要介绍，参考来源已附文末。</p>
+<p>常见的预处理命令大致如下：</p>
+<ul>
+<li>#空指令：无任何效果</li>
+<li>#include：包含一个源代码文件</li>
+<li>#define：定义宏</li>
+<li>#undef：取消已定义的宏</li>
+<li>#if：如果给定条件为真，则编译下面代码</li>
+<li>#ifdef：如果宏已经定义，则编译下面代码</li>
+<li>#ifndef：如果宏没有定义，则编译下面代码</li>
+<li>#elif：如果前面给定的#if条件不为真，当前条件为真，则编译下面代码</li>
+<li>#endif：结束一个<code>#if...#else</code>条件编译块</li>
+<li>#error：停止编译并显示错误信息</li>
+</ul>
+<h1 id="什么是预处理指令"><a href="#什么是预处理指令" class="headerlink" title="什么是预处理指令"></a>什么是预处理指令</h1><p>预处理指令：<strong>以#号开头的代码行</strong>。</p>
+<p>一般规则是：</p>
+<ol>
+<li>#号必须是该行除了任何空白字符外的第一个字符；</li>
+<li>#后是指令关键字，在关键字和#号之间允许存在任意个数的空白字符;</li>
+<li>整行语句构成了一条预处理指令，该指令将在编译器进行编译之前对源代码做某些转换。</li>
+</ol>
+<p>需要注意的是：预处理指令是在编译器进行编译之前进行的操作。预处理过程扫描源代码，对其进行初步的转换，产生新的源代码提供给编译器。</p>
+<h1 id="常见的预处理指令"><a href="#常见的预处理指令" class="headerlink" title="常见的预处理指令"></a>常见的预处理指令</h1><h2 id="include"><a href="#include" class="headerlink" title="#include"></a>#include</h2><p>作用：包含一个源代码文件（也就是我们经常说的头文件）。一般来说，头文件主要有两大类：</p>
+<ol>
+<li>标准库中的头文件：使用尖括号括起来，使用时从标准库中寻找</li>
+<li>自定义的头文件：使用双引号括起来，使用时从当前源代码文件中寻找，若找不到，再从标准库中寻找</li>
+</ol>
+<h2 id="define"><a href="#define" class="headerlink" title="#define"></a>#define</h2><p>作用：定义一个宏（macro）。其全称应该位宏指令（macroinstruction），简单来说就是把较长的指令序列用某种规则对应到较短的指令序列的规则或模式。在office中的宏实质是一系列的批处理命令，而在我们目前所研究的C语法中，其只是<strong>简单的文本搜索和替换</strong>，不做计算也不做表达式求解，因而在C++中，一般建议使用const来定义常量进而替换宏，因为const会有常量的数据类型。宏一般有两类：</p>
+<ol>
+<li><p>不带参数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX 1000</span></div><div class="line"><span class="keyword">int</span> a=MAX;</div></pre></td></tr></table></figure>
+</li>
+<li><p>带参数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SQR(x) ((x)*(x))  <span class="comment">//参数括号建议加上</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> SQR  <span class="comment">//只需要宏名，不用带参数，带入参数将报错</span></span></div><div class="line">  b=SQR(a+<span class="number">3</span>);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div></pre></td></tr></table></figure>
+</li>
+<li><p>带参数宏中#的使用：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> STR(s) #s</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> CONS(a,b) (int)(a##e##b)</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> STR</span></div><div class="line">  <span class="built_in">printf</span>(STR(VCK));  <span class="comment">//将参数转化为一个字符串</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONS</span></div><div class="line">  <span class="built_in">printf</span>(CONS(<span class="number">1</span>,<span class="number">2</span>)); <span class="comment">//将宏参数连在一起，也就是aeb，代入参数1e2，表示100</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line"><span class="comment">/* #的作用 </span></div><div class="line"> * 一个#表示将参数转为一个字符串；</div><div class="line"> * 两个#表示将参数连接在一起；</div><div class="line"> */</div></pre></td></tr></table></figure>
+</li>
+<li><p>空宏定义（e.g.：<code>#define DEBUG</code>）</p>
+<p> 作用：只有一个参数的宏称为空宏定义，其不对代码产生任何影响。主要是为了方便代码阅读（如__IN__和__OUT__宏表示参数是输入还是输出）和作为标记（UNICODE和DEBUG）进而切换配置，自己写程序时可以多加留意。常与其他一些预处理命令连用来进行代码调试和维护。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> D(x)</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    D(<span class="built_in">printf</span>(<span class="string">"null macro"</span>));  <span class="comment">//不进行任何操作，等同于代码注释</span></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* #define D(x)</span></div><div class="line"> * 等同于</div><div class="line"> * #define D(x) do&#123;&#125;while(0)   执行一次便退出，并且执行内容为空</div><div class="line"> */</div></pre></td></tr></table></figure>
+</li>
+<li><p>预定义宏</p>
+<p>作用：在C中预定义了一些宏，称为<a href="https://msdn.microsoft.com/zh-cn/library/b0084kay.aspx" target="_blank" rel="external">预定义宏</a>，主要用来提供当前编译的信息。主要由以下几种：</p>
+<ul>
+<li><code>__LINE__</code>：被编译的文件的行数，整型常量</li>
+<li><code>__FILE__</code>：被编译的文件的名字，字符串</li>
+<li><code>__DATE__</code>：编译的日期（格式为M D Y形式的字符串）</li>
+<li><code>__TIME__</code>：编译的时间（格式为<code>h:m:s</code>形式的字符串)</li>
+<li><code>__STDC__</code>：如果编译器接受标准C，那么值为整型常量1</li>
+<li><code>__func__</code>：当前所在函数名，在C++中为<code>__FUNCTION__</code>，在VC中不支持该宏，但在g++中可以使用</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 一般用法 */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span> </span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line">  </div><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __func__</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> __func__  (__FUNCTION__)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">   <span class="built_in">cout</span>&lt;&lt;<span class="string">"func name is:"</span>&lt;&lt;__func__&lt;&lt;<span class="built_in">endl</span>;    </div><div class="line">   <span class="built_in">cout</span>&lt;&lt;<span class="string">"func name is:"</span>&lt;&lt;__FUNCTION__&lt;&lt;<span class="built_in">endl</span>;  <span class="comment">//在C中将会报错，但在C++中不会    </span></div><div class="line">&#125;</div><div class="line">  </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">   <span class="built_in">cout</span>&lt;&lt;<span class="string">"date is :"</span>&lt;&lt;__DATE__&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">   <span class="built_in">cout</span>&lt;&lt;<span class="string">"time is :"</span>&lt;&lt;__TIME__&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">   <span class="built_in">cout</span>&lt;&lt;<span class="string">"file is :"</span>&lt;&lt;__FILE__&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">   <span class="built_in">cout</span>&lt;&lt;<span class="string">"line is :"</span>&lt;&lt;__LINE__&lt;&lt;<span class="built_in">endl</span>;</div><div class="line"></div><div class="line">   func();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="ifdef-ifndef-endif"><a href="#ifdef-ifndef-endif" class="headerlink" title="#ifdef, #ifndef, #endif"></a>#ifdef, #ifndef, #endif</h2><p>作用：条件编译指令，将决定程序中哪些代码被编译，而哪些代码不被编译</p>
+<ol>
+<li><p>define - ifdef - endif</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DEBUG</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">    <span class="keyword">char</span> c;</div><div class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</div><div class="line">    &#123;</div><div class="line">        i++;</div><div class="line">        c = getchar();</div><div class="line">        <span class="keyword">if</span>(<span class="string">'\n'</span> != c)</div><div class="line">        &#123;</div><div class="line">            getchar();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(<span class="string">'q'</span> == c || <span class="string">'Q'</span> == c)</div><div class="line">        &#123;</div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> DEBUG  <span class="comment">//判断DEBUG是否被定义了</span></span></div><div class="line">            <span class="built_in">printf</span>(<span class="string">"We get:%c,about to exit.\n"</span>,c);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            <span class="built_in">printf</span>(<span class="string">"i = %d"</span>,i);</div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> DEBUG</span></div><div class="line">            <span class="built_in">printf</span>(<span class="string">",we get:%c"</span>,c);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">            <span class="built_in">printf</span>(<span class="string">"\n"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"Hello World!\n"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/*#endif用于终止#ifdef预处理指令。*/</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>ifdef - ifndef</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DEBUG</span></div><div class="line">main()</div><div class="line">&#123;</div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> DEBUG</span></div><div class="line">    <span class="built_in">printf</span>(<span class="string">"yes "</span>);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> DEBUG</span></div><div class="line">    <span class="built_in">printf</span>(<span class="string">"no "</span>);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">&#125;</div><div class="line"><span class="comment">//#ifdefined等价于#ifdef;</span></div><div class="line"><span class="comment">//#if!defined等价于#ifndef</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>if - else - endif</p>
+<p>在预处理阶段就智能屏蔽掉相应的语句，在实际编译时屏蔽掉的语句不再进行编译。</p>
+</li>
+<li><p>if - elseif - else - endif</p>
+<p>适用于多个条件，进而将需要编译的部分代码在编译前就进行确认。</p>
+</li>
+</ol>
+<h1 id="实战借鉴"><a href="#实战借鉴" class="headerlink" title="实战借鉴"></a>实战借鉴</h1><h2 id="利用宏来调试代码"><a href="#利用宏来调试代码" class="headerlink" title="利用宏来调试代码"></a>利用宏来调试代码</h2><p>在不删除代码的前提下修改代码，可以利用预处理命令来实现。学会利用宏来注释代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></div><div class="line"><span class="comment">///&lt; 旧的代码(或函数) (旧的代码, 将会被预处理的时候,屏蔽掉, 不进行编译)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">else</span></span></div><div class="line"><span class="comment">///&lt; 新的代码(或函数)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"> </div><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> JOE_DEBUG</span></div><div class="line"><span class="comment">///&lt; 新的代码(或函数)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">else</span></span></div><div class="line"><span class="comment">///&lt; 旧的代码(或函数) (旧的代码, 将会被预处理的时候,屏蔽掉, 不进行编译)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"> </div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> Q_DEBUG</span></div><div class="line"><span class="comment">///&lt; 新的代码(或函数)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">else</span></span></div><div class="line"><span class="comment">///&lt; 旧的代码(或函数) (旧的代码, 将会被预处理的时候,屏蔽掉, 不进行编译)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div></pre></td></tr></table></figure>
+<h2 id="跨平台编程"><a href="#跨平台编程" class="headerlink" title="跨平台编程"></a>跨平台编程</h2><p>根据不同平台本省自带的有别于其他平台的系统宏，我们可以实现代码在各个平台之间的无缝移植。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> OS_Win</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"> </div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> OS_Mac</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mac.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"> </div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> OS_Linux</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div></pre></td></tr></table></figure>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>还有另外的一些系统自定义的预处理命令，如#line，#error等，对于#error，我们可以利用其来显示错误信息，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 如果JOE宏没有定义,那么编译就此结束, 编译器就会显示红色的错误 */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> JOE</span></div><div class="line"><span class="meta">#<span class="meta-keyword">error</span> <span class="meta-string">"JOE is not exits"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div></pre></td></tr></table></figure>
+<p>参考来源：</p>
+<ul>
+<li><a href="http://www.cnblogs.com/zi-xing/p/4550246.html" target="_blank" rel="external">C/C++预处理指令#define,#ifdef,#ifndef,#endif…</a></li>
+<li><a href="http://baike.baidu.com/view/1334643.htm" target="_blank" rel="external">预处理命令</a></li>
+<li><a href="http://blog.csdn.net/hguisu/article/details/7470695" target="_blank" rel="external">C语言中的宏定义</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C-C/" rel="tag"># C/C++</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/09/Hello-strangers/" rel="next" title="Hello,strangers~">
+                <i class="fa fa-chevron-left"></i> Hello,strangers~
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/10/JPEG配置安装官方指南/" rel="prev" title="JPEG配置安装官方指南">
+                JPEG配置安装官方指南 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/02/09/C-C-预处理指令/"
+     data-title="C/C++预处理指令"
+     data-content=""
+     data-url="http://yoursite.com/2017/02/09/C-C-预处理指令/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/09/C-C-预处理指令/"
+           data-title="C/C++预处理指令" data-url="http://yoursite.com/2017/02/09/C-C-预处理指令/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar/boy.png"
+               alt="Gaox" />
+          <p class="site-author-name" itemprop="name">Gaox</p>
+          <p class="site-description motion-element" itemprop="description">这是一个小子的个人blog，嗯，没啥会的~</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhejianggaoxiao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://zhihu.com/people/zhejianggaoxiao" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/zhejiangblue" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://music.163.com/#/user/home?id=35617743" target="_blank" title="网易云">
+                  
+                    <i class="fa fa-fw fa-music"></i>
+                  
+                  网易云
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是预处理指令"><span class="nav-number">1.</span> <span class="nav-text">什么是预处理指令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常见的预处理指令"><span class="nav-number">2.</span> <span class="nav-text">常见的预处理指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#include"><span class="nav-number">2.1.</span> <span class="nav-text">#include</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#define"><span class="nav-number">2.2.</span> <span class="nav-text">#define</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ifdef-ifndef-endif"><span class="nav-number">2.3.</span> <span class="nav-text">#ifdef, #ifndef, #endif</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实战借鉴"><span class="nav-number">3.</span> <span class="nav-text">实战借鉴</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#利用宏来调试代码"><span class="nav-number">3.1.</span> <span class="nav-text">利用宏来调试代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跨平台编程"><span class="nav-number">3.2.</span> <span class="nav-text">跨平台编程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gaox</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zhejiangblue"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('footer')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js?v=5.1.0"></script>
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OhVoAvGprlcQcE874iz42HN5-gzGzoHsz", "HYUlzEMlDdpDTLpJ4Ll67Daj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

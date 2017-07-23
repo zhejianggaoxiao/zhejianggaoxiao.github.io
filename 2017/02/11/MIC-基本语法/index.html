@@ -1,0 +1,1222 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="MIC," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="MIC并没有单独的编程语言，MIC编程是对C/C++/Fortran语言的扩展，其使用了编译制导语句。它十分类似于OpenMP，不过MPSS（Intel MIC Platform Software Stack，英特尔MIC平台软件栈）也提供了一些高级API函数接口以便满足不同需求。这篇文章主要对offload模式的MIC编程语法进行一个简单学习。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MIC-基本语法">
+<meta property="og:url" content="http://yoursite.com/2017/02/11/MIC-基本语法/index.html">
+<meta property="og:site_name" content="Who are you?">
+<meta property="og:description" content="MIC并没有单独的编程语言，MIC编程是对C/C++/Fortran语言的扩展，其使用了编译制导语句。它十分类似于OpenMP，不过MPSS（Intel MIC Platform Software Stack，英特尔MIC平台软件栈）也提供了一些高级API函数接口以便满足不同需求。这篇文章主要对offload模式的MIC编程语法进行一个简单学习。">
+<meta property="og:updated_time" content="2017-03-02T15:00:17.729Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MIC-基本语法">
+<meta name="twitter:description" content="MIC并没有单独的编程语言，MIC编程是对C/C++/Fortran语言的扩展，其使用了编译制导语句。它十分类似于OpenMP，不过MPSS（Intel MIC Platform Software Stack，英特尔MIC平台软件栈）也提供了一些高级API函数接口以便满足不同需求。这篇文章主要对offload模式的MIC编程语法进行一个简单学习。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6384644433400301000',
+      author: 'xoaG'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/02/11/MIC-基本语法/"/>
+
+
+
+
+
+  <title> MIC-基本语法 | Who are you? </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a7a0c4c8a6ef4131e469f6d4b9dd315c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Who are you?</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Why are you ?</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/11/MIC-基本语法/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Gaox">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar/boy.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Who are you?">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Who are you?" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MIC-基本语法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T19:19:12+08:00">
+                2017-02-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/HPC/" itemprop="url" rel="index">
+                    <span itemprop="name">HPC</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/11/MIC-基本语法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/11/MIC-基本语法/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/11/MIC-基本语法/" class="leancloud_visitors" data-flag-title="MIC-基本语法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>MIC并没有单独的编程语言，MIC编程是对C/C++/Fortran语言的扩展，其使用了编译制导语句。它十分类似于OpenMP，不过MPSS（Intel MIC Platform Software Stack，英特尔MIC平台软件栈）也提供了一些高级API函数接口以便满足不同需求。这篇文章主要对offload模式的MIC编程语法进行一个简单学习。</p>
+<a id="more"></a>
+<h1 id="offload模式"><a href="#offload模式" class="headerlink" title="offload模式"></a>offload模式</h1><p>关键词offload的作用：在offload作用范围内的程序代码是要在MIC卡上运行的。offload语句用于CPU与MIC的主从模式。</p>
+<h2 id="offload基本语句"><a href="#offload基本语句" class="headerlink" title="offload基本语句"></a>offload基本语句</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">C/C++:</div><div class="line"><span class="meta">#<span class="meta-keyword">pragma</span> offload</span></div><div class="line"></div><div class="line">Fortran：</div><div class="line">！dec$ OFFLOAD       <span class="comment">//后面必须紧跟OpenMP语句或是函数调用语句</span></div><div class="line">或</div><div class="line">！DIR$ OFFLOAD BEGIN ……</div><div class="line">！除了OpenMP以外的其他语句，如<span class="keyword">do</span>，call语句    <span class="comment">//不能使用OpenMP语句</span></div><div class="line">！DIR$ END OFFLOAD</div></pre></td></tr></table></figure>
+<blockquote>
+<p>SIMD模型：如果一个程序的主要代码集中在for循环中，那么他就是典型的SIMD，即每次循环迭代，都拥有相同的指令，只是数据各不相同。</p>
+</blockquote>
+<p><strong>Tips：</strong></p>
+<ul>
+<li>移植到MIC上，只需加上上面的编译制导语句</li>
+<li>编译时不需要任何特殊的编译选项，默认为MIC程序，若要编译成CPU程序，则需要加入<code>-no-offload</code>。</li>
+<li>普通的循环程序代码加上<code>offload</code>语句后，其在MIC上仍然是串行执行的（只用到了MIC一个核的一个硬件线程）。offload语句本身只是起到了指示编译器将代码放入设备端运行的作用，并不指示代码并行执行。若想实现在MIC上的并行，则需要在设备端使用OpenMP。</li>
+</ul>
+<h2 id="程序移植所需工作"><a href="#程序移植所需工作" class="headerlink" title="程序移植所需工作"></a>程序移植所需工作</h2><ul>
+<li>移植到MIC上，只需加上上面的编译制导语句</li>
+<li>编译时不需要任何特殊的编译选项，默认为MIC程序，若要编译成CPU程序，则需要加入<code>-no-offload</code>。</li>
+<li>普通的循环程序代码加上<code>offload</code>语句后，其在MIC上仍然是串行执行的（只用到了MIC一个核的一个硬件线程）。offload语句本身只是起到了指示编译器将代码放入设备端运行的作用，并不指示代码并行执行。若想实现在MIC上的并行，则需要在设备端使用OpenMP。</li>
+</ul>
+<p><strong>Tips：</strong>判断程序是否在MIC执行：MIC提供了一个检查宏_MIC_（相关语法在后面涉及）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">C/C++:</div><div class="line">_attribute_((target(mic)))<span class="function"><span class="keyword">void</span> <span class="title">funcheck</span><span class="params">(<span class="keyword">int</span> i)</span></span></div><div class="line">&#123;</div><div class="line">#<span class="function">ifdef_MIC_</span></div><div class="line">	<span class="title">printf</span><span class="params">(<span class="string">"Index on MIC:%d\n"</span>,i)</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">else</span></span></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Index on CPU:%d\n"</span>,i);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="MIC数据传输"><a href="#MIC数据传输" class="headerlink" title="MIC数据传输"></a>MIC数据传输</h1><p><strong>Tips</strong>：</p>
+<ol>
+<li>不建议在设备端使用打印或是输出语句</li>
+<li>使用引语编程的一个好处便是使用一套代码就可以满足不同模型，只要不加上相应的编译选项，就不会使用该特性</li>
+</ol>
+<h2 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h2><ol>
+<li><p><strong>out</strong>：通知编译器，括号内的变量/数组是需要输出的，这样驱动就会在代码离开MIC卡时，将变量拷贝到内存中相应的位置中。</p>
+<p><strong>注意</strong>：</p>
+<ul>
+<li>若是在栈上声明的数组，其长度在编译时就已经确定，所以不需要在传输时标注长度，但是若是在堆上声明的数组，由于编译时大小不能确定，因此必须在传输时标注数组大小。关于堆栈的内容可以参考我的另外一篇博文：<a href="https://zhejianggaoxiao.github.io/2017/02/12/C-C-%E4%B8%AD%E5%A0%86%E4%B8%8E%E6%A0%88%E7%AE%80%E6%9E%90/#more" target="_blank" rel="external">C/C++中堆与栈简析</a></li>
+<li>非数组的变量若不显式传值，一旦MIC用到，就会自动以inout方式传递。</li>
+</ul>
+</li>
+<li><p><strong>in</strong>：输入，在设备端开辟空间并将主机端数据复制到设备端</p>
+</li>
+<li><p><strong>inout</strong>：输入并输出，在设备端开辟空间，在进入设备端时将数据复制到设备端，在从设备端离开时，将数据从设备端复制到主机端。</p>
+</li>
+<li><p><strong>nocopy</strong>：不拷贝。仅在设备端建立空间，不复制数据。但是需要在CPU端声明</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">_attribute_((target(mic)))<span class="keyword">float</span>* a;  <span class="comment">//a是中间变量，因此不需要再CPU端申请空间，但是必须声明为全局变量，且加上attribute前缀。</span></div><div class="line"><span class="meta">#<span class="meta-keyword">pragma</span> offload target(mic:0)nocopy(a:length(LEN) alloc_if(1) free_if(0))  <span class="comment">//示例</span></span></div></pre></td></tr></table></figure>
+<p><strong>Tips</strong>：nocopy使用场合</p>
+<ul>
+<li>在不同的offload区域（offload两次），如果后一次需要用到的前一次计算后的某些变量和数据，则可以使用nocopy避免数据内存中转，造成浪费（<code>#pragma offload nocopy(a)</code>）</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>变量作为设备代码段中的临时变量（不需从主机赋初值，也不需传回主机）</li>
+</ul>
+<h2 id="Rule-of-thumbs"><a href="#Rule-of-thumbs" class="headerlink" title="Rule of thumbs"></a>Rule of thumbs</h2><h3 id="一般规则"><a href="#一般规则" class="headerlink" title="一般规则"></a>一般规则</h3><ol>
+<li>传输关键字可以有多个或零个，当多个时：可以连续书写，也可以用逗号或空格隔开。相同的关键字可以在一个offload语句中出现多次，但<strong>相同的变量名不可以在一个offload中出现多次</strong>（即使是在不同的关键字中）；</li>
+<li>传输关键字后跟括号，括号内为变量名；</li>
+<li>变量应为<strong>数组名或是指针（特指动态数组指针）</strong>或普通标量，多个变量之间用逗号隔开；</li>
+<li>变量为指针时，指针只能指向非指针变量，即<strong>不支持二维指针</strong>。</li>
+<li>变量为数组或是指向数组的指针时，可以<strong>指定数组起始与长度</strong>；</li>
+<li>变量为指针时，需要在变量名后面加上”：length（len）”，其中len为动态数组的元素个数，若多个动态数组长度相同，则可以写在一起，如：in（a，b，c：length（20））。<strong>元素个数可以是变量</strong></li>
+<li>除了length以外，还有alloc_if、free_if、align、alloc、into等五个关键字，一个传输关键字用一个冒号即可</li>
+<li>alloc_if和free_if的参数是判断表达式，其计算结果应该是布尔型。若alloc_if的参数结果为真则在进入设备端是为前述变量开辟空间，若free_if的参数结果为真则在离开设备端时为前述变量释放空间。</li>
+<li>align的参数时一个正整数，且必须是2的正整数次幂，其含义为在设备端开辟的前述变量，以align参数的长度对齐</li>
+<li>alloc的参数是数组名，含义是创建指定的部分内存空间</li>
+<li>into的参数是变量或是数组名，但只能一对一传递，含义为将数组中主机端拷贝到设备端的另一个数组，或相反。into可以和alloc，alloc_if，free_if结合使用，但不能与inout，nocopy同时使用。</li>
+</ol>
+<blockquote>
+<p>示例讲解：P92</p>
+</blockquote>
+<h3 id="in-out-inout的实用语法"><a href="#in-out-inout的实用语法" class="headerlink" title="in/out/inout的实用语法"></a>in/out/inout的实用语法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">/* 使用in out inout 传递部分数组 */</div><div class="line"></div><div class="line">1	typedef int Array[10][10];</div><div class="line">2	int a[1000][500];</div><div class="line">3	int *p;</div><div class="line">4	Array *q;</div><div class="line">5	int *r[10][10]</div><div class="line">6	int i,j;</div><div class="line">7	struct &#123; int y; &#125; x;</div><div class="line"></div><div class="line">8	#pragma offload ... in(a);</div><div class="line">9	#pragma offload ... out(a[i:j][:])</div><div class="line">10	#pragma offload ... in(p[0:100])</div><div class="line">11	#pragma offload ... in((*q)[5][:])</div><div class="line">12	#pragma offload ... out(x,y)</div></pre></td></tr></table></figure>
+<ul>
+<li><p>​</p>
+</li>
+<li><p>8：最常用的数组引用方法，传输全部数据</p>
+</li>
+<li><p>9：传输数组a的一部分，其中<code>[i:j]</code>规范第一维，<code>i</code>表示起始位置，<code>j</code>表示个数，第二维中只有冒号，省略了前后，表示第二维是完整的。<strong>长度参数可以是变量</strong>。</p>
+</li>
+<li><p>10：即使传输的是指向动态数组的指针，也可以用数组的“[ ]”表示。</p>
+</li>
+<li><p>11：第一维只有一个参数5，意味第一维只有一个元素</p>
+</li>
+<li><p>12：表示可以传输结构体的一部分</p>
+<p><strong>注意</strong>：需要注意的是，虽然传输的是数组的一部分，但在MIC卡端开辟内存空间时，仍然开辟了从第一个元素开始的<strong>全部空间</strong>，所以一方面这种写法并没有减少内存使用，另一方面在使用时仍然要将数组视为<strong>整体使用</strong>。</p>
+<p>针对此种写法的关键字：<strong>alloc和into</strong></p>
+<ul>
+<li><p>由于传输部分数组的语法会开辟全部的内存空间，因此可以使用alloc语法限定开辟的空间范围</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 下述语句：</span></div><div class="line">* ①在设备端开辟1000个元素的数组p，数组下标从5开始，到1004；</div><div class="line">* ②将主机端的p[10]-p[109]传到设备端的p[10]-p[109]，检查数据越界的责任仍然是程序员。 */</div><div class="line">pragma offload ... in (p[<span class="number">10</span>:<span class="number">100</span>]:alloc(p[<span class="number">5</span>:<span class="number">1000</span>])</div></pre></td></tr></table></figure>
+</li>
+<li><p>into语句可以将主机端的数据数组一部分传递给另一个设备数组</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 使用这种方式需要注意数组覆盖的情况。另外还要注意的就是into不能实现不同维度数组间的数据传递。*/</span></div><div class="line"><span class="meta">#<span class="meta-keyword">pragma</span> offload ... in (p[0:500]:into(p1[500:500]))</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="其他一些关键字"><a href="#其他一些关键字" class="headerlink" title="其他一些关键字"></a>其他一些关键字</h2><h3 id="target"><a href="#target" class="headerlink" title="target"></a>target</h3><ol>
+<li><p><code>target（mic)：mic</code>是目前唯一合法的取值。在运行时可以指定使用第几块mic卡，用法是在mic后加冒号并附加序号，如target（mic：1），序号应注意：</p>
+<ul>
+<li>当序号大于等于0时，程序将offload到相应设备设备上，设备号计算方法：设备号=序号mod总设备数（取余）</li>
+<li>当序号等于-1时，系统自动选择计算设备</li>
+<li>序号不可小于-1</li>
+</ul>
+</li>
+<li><p>使用多块MIC卡协同计算的OpenMP循环代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">omp_set_nested(<span class="number">1</span>);      <span class="comment">//嵌套OpenMP代码</span></div><div class="line"><span class="meta">#<span class="meta-keyword">pragma</span> parallel for num_threads(3)  <span class="comment">//假设有两块MIC卡，和CPU协同计算</span></span></div><div class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)</div><div class="line">&#123;</div><div class="line"><span class="meta">#<span class="meta-keyword">pragma</span> offload target(mic:i) <span class="meta-keyword">if</span>(i&gt;1) in(...) out(...)</span></div><div class="line">...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上代码将第一份任务指定给了CPU，第2,3份指定给了两块不同的MIC卡。由于使用了嵌套OpenMP代码，因此需要调用第一句。</p>
+</li>
+<li><p>在offload之前，可以使用API函数 <code>int\_Offload\_number\_of\_devices(void)</code>确定系统拥有的MIC设备数。在offload的代码段里，可以使用API函数<code>int\_Offload\_get\_device\_number(void)</code>获取该代码段所在的设备编号。</p>
+</li>
+</ol>
+<h3 id="if"><a href="#if" class="headerlink" title="if"></a>if</h3><p>根据条件判断是否要将代码段放到设备上运行，若表达式为真，则在MIC端运行，否则在CPU端运行（如上代码）</p>
+<h3 id="mandatory"><a href="#mandatory" class="headerlink" title="mandatory"></a>mandatory</h3><ol>
+<li>表示该代码必须在MIC上运行，若设备不可用，直接报错。</li>
+<li>不可与if同时使用。</li>
+</ol>
+<h3 id="异步传输"><a href="#异步传输" class="headerlink" title="异步传输"></a>异步传输</h3><ol>
+<li>signal和wait：即CPU端无需等待offload语句返回，即可异步运行下面的代码。一般用于启动MIC代码段后，并发执行CPU代码，达到同步执行的目的</li>
+<li>offload_transfer和offload_wait：与offload类似，只负责数据传输，后面不加入计算代码。其中offload_transfer支持的参数与offload语句相同，但offload只支持target、if、wait三个参数</li>
+<li>用法：<ul>
+<li>signal语句在offload语句代码段结束后发送一个信号，wait语句负责接收，所以二者一定是成对使用</li>
+<li>wait语句可以一次等待多个信号，所以二者语句数量未必相等</li>
+<li>signal 和 wait的参数是tag，在C中，是数组指针，同时传输多个数组指针时，能且只能signal/wait一个数组名。在Fortran中，该变量是一个整型变量。</li>
+</ul>
+</li>
+</ol>
+<h2 id="offload语法总结"><a href="#offload语法总结" class="headerlink" title="offload语法总结"></a>offload语法总结</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 使用格式 */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">pragma</span> offload specifier[，specifier ...]</span></div></pre></td></tr></table></figure>
+<p>其中，specifier可填入：<code>target，if，in，out，inout，nocopy，signal，wait，mandatory</code>，而在<code>in/out/inout/nocopy</code>可用属性有：<code>length，alloc_if，free_if，align，alloc，into</code>。</p>
+<h1 id="变量与函数声明"><a href="#变量与函数声明" class="headerlink" title="变量与函数声明"></a>变量与函数声明</h1><h2 id="单个声明方式"><a href="#单个声明方式" class="headerlink" title="单个声明方式"></a>单个声明方式</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">C/C++：</div><div class="line">_declsspec(target(mic))函数或变量声明</div><div class="line">或</div><div class="line">_attribute_((target(mic)))函数或变量声明</div><div class="line"></div><div class="line">Fortran：</div><div class="line">!DIR$ attributes offload: target-name :: routine 名或变量名[，routine 名或变量名]...</div></pre></td></tr></table></figure>
+<h2 id="批量声明方式"><a href="#批量声明方式" class="headerlink" title="批量声明方式"></a>批量声明方式</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">C/C++：</div><div class="line"><span class="meta">#<span class="meta-keyword">pragma</span> offload_attribute（push, target(mic))</span></div><div class="line">	变量或函数声明；</div><div class="line"><span class="meta">#<span class="meta-keyword">pragma</span> offload_attribute(pop)</span></div><div class="line">或</div><div class="line"><span class="meta">#<span class="meta-keyword">pragma</span> offload_attribute( target(mic))</span></div><div class="line">	变量或函数声明；</div><div class="line"><span class="meta">#<span class="meta-keyword">pragma</span> offload_attribute( target(none))</span></div><div class="line"></div><div class="line">Fortran：</div><div class="line">!DIR$ OPTIONS /OFFLOAD_ATTRIBUTE_TARGET=mic</div><div class="line">	变量或函数声明；</div><div class="line">!DIR$ END OPTIONS</div></pre></td></tr></table></figure>
+<p><strong>注意</strong>：</p>
+<ul>
+<li>在C/C++中，使用attribute的话，需要注意target外围是<strong>两层括号</strong>，只写一层是错的</li>
+<li>上述声明方式适用于函数与变量，变量是全局变量</li>
+<li>函数和变量可以同时用于CPU与MIC</li>
+</ul>
+<h1 id="MIC程序编译运行注意事项"><a href="#MIC程序编译运行注意事项" class="headerlink" title="MIC程序编译运行注意事项"></a>MIC程序编译运行注意事项</h1><h2 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h2><ol>
+<li>在C/C++中，在MIC中若要用到API，需包含offload.h</li>
+<li>在Fortran中，需要include mic_lib.f90或USE mic_lib</li>
+</ol>
+<h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><ol>
+<li><p><strong>MIC_STACKSIZE</strong>：规定MIC上每个线程所占的栈的大小，默认2MB，可以修改：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export MIC_STACKSIZE=5M</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>MIC_ENV_PREFIX</strong>：可以设置MIC专属环境变量的前缀，以区分MIC端和CPU端的环境变量，若不加以却别，默认情况下，CPU端的环境变量会作用于MIC端，示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export OMP_NUM_THREADS=8</div><div class="line">export MIC_OMP_NUM_THREADS=124</div><div class="line">export MIC_ENV_PREFIX=MIC_</div></pre></td></tr></table></figure>
+<p>使用方法如下：定义一个前缀“MIC_”，若MIC上有环境变量符合前缀，则去掉前缀，并将其作用于MIC上。</p>
+</li>
+<li><p><strong>MIC_LD_LIBRARY_PATH</strong>：定义了程序在MIC上运行时所需要用到的共享库路径，此处的共享库路径指MIC卡上的地址，即需要手动将共享库传输到MIC端，路径一般指向用户自己编写的共享库。由于主机端的LD_LIBRARY_PATH不会自动扩展到MIC上，因此不需要结合上面的环境变量</p>
+</li>
+</ol>
+<h2 id="编译选项"><a href="#编译选项" class="headerlink" title="编译选项"></a>编译选项</h2><ol>
+<li><code>-mmic</code>：表示编译出的程序只能在MIC上运行。默认不开启，不开启时编译产生的程序是异构程序。</li>
+<li><code>-no-offload</code>：表示编译出的程序只能在CPU上运行，使用这个选项时，将忽略程序中所有与MIC相关的语句。默认不开启，开启时编译产生的程序是纯CPU程序。</li>
+<li><code>-offload-attribute-target=mic</code>：表示所有未声明为mic可用的函数和全局变量都可以在MIC中使用，与在代码中使用attribute属性声明函数或变量的效果相同。默认不开启。</li>
+<li><code>-offload-option，target，tool，&quot;option-list&quot;</code>：作用为针对被offload的对象，即在MIC卡上运行的代码段，使用特殊的编译选项。其中<strong>target只能选mic，tool只能取ld（链接库时用到的程序），as（汇编器）或compiler（编译器）之一</strong>，option-list是具体的选项，必须用引号括起来，选项之间用空格分开。</li>
+</ol>
+<p><strong>注意</strong>：</p>
+<ul>
+<li>MIC程序的编译选项与CPU程序无多大差别，绝大多数的CPU程序编译选项也能在MIC程序中使用</li>
+<li>异构程序编译时，使用的编译选项会全部传递给主机端编译程序。有一部分（MIC支持的部分）会被传递给MIC端编译程序，可以通过<code>&quot;-watch=mic-cmd&quot;</code>查看</li>
+<li>使用offload-option（上述第4点）增加的编译选项，只能在MIC端使用，并且会覆盖或附加在CPU端过去的编译选项之后。若想覆盖，则需要将-offload-load写在自动传输的参数前面，若-offload-option选项被写在后面，则会附加到自动传输的参数后面。</li>
+</ul>
+<h1 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h1><ul>
+<li>在offload区域只能正常退出，使用exit（）会报错</li>
+<li>在Fortran中在外部函数/subroutine中定义的变量不能通过offload语句传递给内部/subroutine，但是SAVE变量不受约束。</li>
+</ul>
+<p>参考资料：</p>
+<ul>
+<li>MIC高性能计算编程指南，王恩东，中国水利水电出版社，2012</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MIC/" rel="tag"># MIC</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/11/MIC-Hello-world/" rel="next" title="MIC-HelloWorld">
+                <i class="fa fa-chevron-left"></i> MIC-HelloWorld
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/11/Log-of-BZ/" rel="prev" title="Log of BanZhuan">
+                Log of BanZhuan <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/02/11/MIC-基本语法/"
+     data-title="MIC-基本语法"
+     data-content=""
+     data-url="http://yoursite.com/2017/02/11/MIC-基本语法/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/11/MIC-基本语法/"
+           data-title="MIC-基本语法" data-url="http://yoursite.com/2017/02/11/MIC-基本语法/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar/boy.png"
+               alt="Gaox" />
+          <p class="site-author-name" itemprop="name">Gaox</p>
+          <p class="site-description motion-element" itemprop="description">这是一个小子的个人blog，嗯，没啥会的~</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhejianggaoxiao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://zhihu.com/people/zhejianggaoxiao" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/zhejiangblue" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://music.163.com/#/user/home?id=35617743" target="_blank" title="网易云">
+                  
+                    <i class="fa fa-fw fa-music"></i>
+                  
+                  网易云
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#offload模式"><span class="nav-number">1.</span> <span class="nav-text">offload模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#offload基本语句"><span class="nav-number">1.1.</span> <span class="nav-text">offload基本语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#程序移植所需工作"><span class="nav-number">1.2.</span> <span class="nav-text">程序移植所需工作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MIC数据传输"><span class="nav-number">2.</span> <span class="nav-text">MIC数据传输</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关键字"><span class="nav-number">2.1.</span> <span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rule-of-thumbs"><span class="nav-number">2.2.</span> <span class="nav-text">Rule of thumbs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一般规则"><span class="nav-number">2.2.1.</span> <span class="nav-text">一般规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#in-out-inout的实用语法"><span class="nav-number">2.2.2.</span> <span class="nav-text">in/out/inout的实用语法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他一些关键字"><span class="nav-number">2.3.</span> <span class="nav-text">其他一些关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#target"><span class="nav-number">2.3.1.</span> <span class="nav-text">target</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#if"><span class="nav-number">2.3.2.</span> <span class="nav-text">if</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mandatory"><span class="nav-number">2.3.3.</span> <span class="nav-text">mandatory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步传输"><span class="nav-number">2.3.4.</span> <span class="nav-text">异步传输</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#offload语法总结"><span class="nav-number">2.4.</span> <span class="nav-text">offload语法总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量与函数声明"><span class="nav-number">3.</span> <span class="nav-text">变量与函数声明</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单个声明方式"><span class="nav-number">3.1.</span> <span class="nav-text">单个声明方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#批量声明方式"><span class="nav-number">3.2.</span> <span class="nav-text">批量声明方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MIC程序编译运行注意事项"><span class="nav-number">4.</span> <span class="nav-text">MIC程序编译运行注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#头文件"><span class="nav-number">4.1.</span> <span class="nav-text">头文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境变量"><span class="nav-number">4.2.</span> <span class="nav-text">环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译选项"><span class="nav-number">4.3.</span> <span class="nav-text">编译选项</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他问题"><span class="nav-number">5.</span> <span class="nav-text">其他问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gaox</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zhejiangblue"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('footer')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js?v=5.1.0"></script>
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OhVoAvGprlcQcE874iz42HN5-gzGzoHsz", "HYUlzEMlDdpDTLpJ4Ll67Daj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,1197 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="MIC," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="从这部分内容开始，我将对MIC高性能计算进行一个比较系统的学习，周期大致为2017年上半年，努力争取完成这个小目标。
+这篇内容主要是对MIC(Many Intergrated Cores)做一个简单介绍，并利用中国科大超算中心（SCC）ChinaGrid服务器上的MIC计算节点进行简单测试，在此感谢SCC提供的技术与服务支持！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MIC-HelloWorld">
+<meta property="og:url" content="http://yoursite.com/2017/02/11/MIC-Hello-world/index.html">
+<meta property="og:site_name" content="Who are you?">
+<meta property="og:description" content="从这部分内容开始，我将对MIC高性能计算进行一个比较系统的学习，周期大致为2017年上半年，努力争取完成这个小目标。
+这篇内容主要是对MIC(Many Intergrated Cores)做一个简单介绍，并利用中国科大超算中心（SCC）ChinaGrid服务器上的MIC计算节点进行简单测试，在此感谢SCC提供的技术与服务支持！">
+<meta property="og:updated_time" content="2017-02-11T07:39:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MIC-HelloWorld">
+<meta name="twitter:description" content="从这部分内容开始，我将对MIC高性能计算进行一个比较系统的学习，周期大致为2017年上半年，努力争取完成这个小目标。
+这篇内容主要是对MIC(Many Intergrated Cores)做一个简单介绍，并利用中国科大超算中心（SCC）ChinaGrid服务器上的MIC计算节点进行简单测试，在此感谢SCC提供的技术与服务支持！">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6384644433400301000',
+      author: 'xoaG'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/02/11/MIC-Hello-world/"/>
+
+
+
+
+
+  <title> MIC-HelloWorld | Who are you? </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a7a0c4c8a6ef4131e469f6d4b9dd315c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Who are you?</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Why are you ?</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/11/MIC-Hello-world/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Gaox">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar/boy.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Who are you?">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Who are you?" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MIC-HelloWorld
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T18:21:45+08:00">
+                2017-02-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/HPC/" itemprop="url" rel="index">
+                    <span itemprop="name">HPC</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/11/MIC-Hello-world/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/11/MIC-Hello-world/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/11/MIC-Hello-world/" class="leancloud_visitors" data-flag-title="MIC-HelloWorld">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>从这部分内容开始，我将对MIC高性能计算进行一个比较系统的学习，周期大致为2017年上半年，努力争取完成这个小目标。</p>
+<p>这篇内容主要是对MIC(Many Intergrated Cores)做一个简单介绍，并利用<a href="http://scc.ustc.edu.cn/" target="_blank" rel="external">中国科大超算中心（SCC）</a>ChinaGrid服务器上的MIC计算节点进行简单测试，在此感谢SCC提供的技术与服务支持！</p>
+<a id="more"></a>
+<h1 id="MIC高性能计算简介"><a href="#MIC高性能计算简介" class="headerlink" title="MIC高性能计算简介"></a>MIC高性能计算简介</h1><h2 id="现状简介"><a href="#现状简介" class="headerlink" title="现状简介"></a>现状简介</h2><h3 id="目前主流的集群架构系统："><a href="#目前主流的集群架构系统：" class="headerlink" title="目前主流的集群架构系统："></a>目前主流的集群架构系统：</h3><ul>
+<li>CPU同构架构系统；</li>
+<li>CPU+GPU异构架构系统：以CPU为主体，主要运行逻辑计算部分，而GPU进行密集运算，两者属于不同指令集下的异构；</li>
+<li>CPU+MIC异构架构系统：基于x86架构的异构计算，MIC的基本指令集与CPU一样，采用x86指令集，并有部分扩展。</li>
+</ul>
+<h3 id="计算机体系结构分类（根据指令与数据流，Flynn分类法）"><a href="#计算机体系结构分类（根据指令与数据流，Flynn分类法）" class="headerlink" title="计算机体系结构分类（根据指令与数据流，Flynn分类法）"></a>计算机体系结构分类（根据指令与数据流，Flynn分类法）</h3><ul>
+<li>单指令流单数据流计算机（SISD）——批处理机模型</li>
+<li>单指令流多数据流计算机（SIMD）</li>
+<li>多指令流单数据流计算机（MISD）——少见</li>
+<li>多指令流多数据流计算机（MIMD）</li>
+</ul>
+<blockquote>
+<p>在商用并行计算机中，MIMD模型最为通用，SIMD次之。</p>
+</blockquote>
+<h3 id="目前高性能计算技术（并行计算的硬件）"><a href="#目前高性能计算技术（并行计算的硬件）" class="headerlink" title="目前高性能计算技术（并行计算的硬件）"></a>目前高性能计算技术（并行计算的硬件）</h3><ul>
+<li>对称多处理机（Symmetric MultiProcessing，SMP）：一种多处理机硬件架构，有两个或更多的相同的处理机（处理器）共享同一主存，由一个操作系统控制。对称多处理架构将多核处理器中的核作为不同的处理器。在进行并行编程时，通常使用<strong>线程</strong>的任务划分，使用<strong>OpenMP扩展或是pThread线程库</strong>。</li>
+<li>集群（Cluster）：通常指一组计算机（一般为服务器级别的硬件）通过网络松散集成，组成局域网，并紧密合作完成计算任务的结构。由于并非共享内存结构，因此通常采用<strong>消息传递方式，如MPI</strong>，进行<strong>进程级</strong>的并行。</li>
+</ul>
+<blockquote>
+<p>松散集成：是相对于在电路板上或是通过高速总线相连接来说的，一般集群中的计算机结点可以单独使用。</p>
+<p>紧密合作：指节点间通常相互协作完成同一任务，而非各自为政。</p>
+</blockquote>
+<ul>
+<li>通用图形处理器（GPGPU，General-purpose computing on graphics processing units）：是一种利用处理图形任务的图形处理器来计算原本由中央处理器处理的通用计算任务。这些通用计算常常与图形处理没有任何关系。</li>
+</ul>
+<blockquote>
+<p>统一设备计算架构（Compute Unified Device Architecture，CUDA）：将GPU作为数据并行计算设备的软硬件系统。</p>
+<p>开放计算语言（Open Computing Language，OpenCL），开放图形库（OpenGL），OpenAL</p>
+</blockquote>
+<h2 id="MIC（Many-Integrated-Core）"><a href="#MIC（Many-Integrated-Core）" class="headerlink" title="MIC（Many Integrated Core）"></a>MIC（Many Integrated Core）</h2><h3 id="什么是MIC"><a href="#什么是MIC" class="headerlink" title="什么是MIC"></a>什么是MIC</h3><p>MIC指的是基于集成众核架构的至强融核系列。其是将多个核心整合在一起的处理器，面向HPC领域，旨在引领行业进入百亿亿次计算的时代，其在计算机体系中，并非要取代CPU，而是作为协处理器存在。MIC芯片通常有数十个精简的x86核心，提供高度并行的计算能力。另外，<u><strong>与其他协处理器不同的是，原生CPU程序（支持C/C++以及Fortran）也可以在MIC上运行，对现有程序无须大的改动</strong></u>。MIC采用SMP结构，以一致性共享缓存为中心。</p>
+<p>一些名词：</p>
+<ul>
+<li>MIC：架构名称；</li>
+<li>Knights系列：研发代号</li>
+<li>Intel Xeon Phi：产品线名称</li>
+</ul>
+<h3 id="GPGPU与MIC比较"><a href="#GPGPU与MIC比较" class="headerlink" title="GPGPU与MIC比较"></a>GPGPU与MIC比较</h3><ul>
+<li>CUDA与MIC中“核”的概念不同，但由于有超线程，MIC中的“执行核”数与GPGPU实际差不多；</li>
+<li>MIC采用SMP结构，以一致性共享缓存为中心，使MIC可以使用传统CPU的编程模型；</li>
+<li>MIC编程与工具方面没有较大的改动；</li>
+<li>GPGPU适用于并行程度极高，分支较少的应用，而MIC适用于并行程度较高，逻辑（分支以及循环等指令）比较复杂的应用。</li>
+</ul>
+<h3 id="MIC编程"><a href="#MIC编程" class="headerlink" title="MIC编程"></a>MIC编程</h3><h4 id="MIC编程模型"><a href="#MIC编程模型" class="headerlink" title="MIC编程模型"></a>MIC编程模型</h4><ul>
+<li>应用程序编程：利用<strong>开发工具</strong>开发用户应用程序或代码；</li>
+<li>系统编程：使用低级API的编程（SCIF），低级API的内容包含在MPSS（Intel MIC Platform Software stack）中。</li>
+</ul>
+<h4 id="MIC应用模式"><a href="#MIC应用模式" class="headerlink" title="MIC应用模式"></a>MIC应用模式</h4><p>简单分为三种（依据串行与并行之间的权重）</p>
+<h5 id="CPU为中心模式："><a href="#CPU为中心模式：" class="headerlink" title="CPU为中心模式："></a>CPU为中心模式：</h5><ol>
+<li><p><strong>CPU原生模式（native模式）</strong></p>
+<ul>
+<li>采用纯CPU计算：适于串行或并行程度较低的并行程序；</li>
+<li>编译选项：-no-offload</li>
+</ul>
+</li>
+<li><p><strong>CPU为主MIC为辅模式（offload模式）</strong></p>
+<ul>
+<li>以CPU为中心，MIC协同计算：适于串行计算程序中包含高度并行计算的部分。 程序主函数由CPU发起，执行到并行部分交由MIC计算；</li>
+<li>此时可以将CPU端称为主机端，或host端，而将MIC端称为设备端，或device端；</li>
+<li>编程形式类似于OpenMP，通过编译制导语句标示欲并行计算的代码。通常，offload语句会与OpenMP语句相结合，以使用MIC设备并行化执行。</li>
+<li>这种模式类似于GPGPU：串行执行—并行部分—串行执行。</li>
+</ul>
+</li>
+</ol>
+<p>关于offload：</p>
+<ul>
+<li><p>offload相关的语义：</p>
+<ul>
+<li>指offload代码，又称为offload语句</li>
+<li>指使用offload语句编程、运行的模式，即offload模式</li>
+<li>指将代码段运行于协处理器上的动作</li>
+</ul>
+</li>
+<li><p>offload模式的适用情况</p>
+<ul>
+<li>常用于单节点，且/或已被OpenMP改造过的程序；</li>
+<li>支持单机单MIC卡和单机多MIC卡，但不支持使用offload语句控制多节点。若是多节点并行，需在外围框架中使用MPI进行数据传输，内部则使用offload+OpenMP模式；</li>
+<li>欲改造现有串行程序使用offload模式并行，则需要：<ul>
+<li>①确定欲并行的部分，并将其改写成OpenMP并行程序；</li>
+<li>②确定输入输出变量之后，书写相应的offload语句。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="MIC为中心模式"><a href="#MIC为中心模式" class="headerlink" title="MIC为中心模式"></a>MIC为中心模式</h5><ul>
+<li><strong>MIC原生模式</strong><ul>
+<li>采用纯MIC计算：适于高并行计算程序，直接在MIC运行。如部分划给CPU执行，反而会增加通信等额外开销。</li>
+<li>MIC拥有自己的基于Linux的操作系统，且拥有自己的IP地址。支持<strong>卡上运行模式</strong>，将程序与数据传输到MIC卡上，并直接在MIC卡上运行程序。</li>
+</ul>
+</li>
+<li><strong>MIC为主CPU为辅模式</strong><ul>
+<li>以MIC为中心，CPU协同计算：适于高并行计算程序中包含部分串行计算部分，程序主函数有MIC发起，执行到串行部分交由CPU，在此CPU作为协处理器。</li>
+</ul>
+</li>
+</ul>
+<p>Tips：</p>
+<ol>
+<li><p>卡上原生运行MIC程序的模式适用于：</p>
+<ul>
+<li>程序整体算法是并行的；</li>
+<li>传输、同步开销过大的程序</li>
+</ul>
+</li>
+<li><p>原生模式运行事项：</p>
+<ul>
+<li>编译选项：-mmic；</li>
+<li>如此编译的程序只能在MIC端运行而不能在CPU端运行，因此在使用时需用<strong>编译两份代码</strong>；</li>
+</ul>
+</li>
+</ol>
+<h5 id="CPU与MIC对等模式"><a href="#CPU与MIC对等模式" class="headerlink" title="CPU与MIC对等模式"></a>CPU与MIC对等模式</h5><ul>
+<li><strong>对等模式</strong><ul>
+<li>适于多进程并行程序，如MPI程序，程序主函数在CPU与MIC端同时发起。</li>
+<li>在这种模式下，与跨节点并行相同，都需要使用MPI函数接口进行通信。</li>
+<li><strong>不需要offload语句进行标示</strong>，全部程序的副本在MIC端运行。</li>
+</ul>
+</li>
+</ul>
+<h4 id="CPU与MIC的工作分配"><a href="#CPU与MIC的工作分配" class="headerlink" title="CPU与MIC的工作分配"></a>CPU与MIC的工作分配</h4><ul>
+<li>当MIC与CPU协同工作时，CPU负责进行逻辑性强的事务处理与串行计算，MIC负责并行计算部分。他们各自拥有<strong>独立的存储器地址空间</strong>：主机端内存和设备端内存。<strong>主机端与设备端的数据交换通过API函数或是编译器指令实现。</strong></li>
+<li>MIC程序与传统的CPU程序相比，增加的只有<strong>指示将代码在设备端运行以及相应的数据传输语句而已</strong>。</li>
+<li>MIC采用的是MIMD架构，既支持SIMD并行方式，也可以通过pThread、MPI等方式是现在不同计算核心上运行不同的指令。</li>
+</ul>
+<h1 id="MIC原生程序示例—计算Pi"><a href="#MIC原生程序示例—计算Pi" class="headerlink" title="MIC原生程序示例—计算Pi"></a>MIC原生程序示例—计算Pi</h1><h2 id="程序源码"><a href="#程序源码" class="headerlink" title="程序源码"></a>程序源码</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* mic_pi.c */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#incllude<span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;math.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">float</span> pi=<span class="number">0.0f</span>;</div><div class="line">	<span class="keyword">int</span> count = <span class="number">1000</span>;</div><div class="line">	<span class="keyword">int</span> i;</div><div class="line"></div><div class="line"><span class="comment">// #pragma offload target(mic)   </span></div><div class="line"><span class="comment">//以MIC原生模式运行，不需要offload语句</span></div><div class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for reduction(+:pi)</span></div><div class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;count;i++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">float</span> t=(<span class="keyword">float</span>)((i+<span class="number">0.5f</span>)/count);</div><div class="line">		pi+=<span class="number">4.0f</span>/(<span class="number">1.0f</span>+t*t);</div><div class="line">	&#125;</div><div class="line">	pi/=count;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Pi=%f\n"</span>,pi);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="编译指令"><a href="#编译指令" class="headerlink" title="编译指令"></a>编译指令</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#icc mic_pi.c -openmp -mmic -o mic_pi</span></div></pre></td></tr></table></figure>
+<p><strong>-mmic</strong>表示以原生模式运行，编译后的文件无法在CPU端运行。从左到右依次为：编译器，输入文件，编译选项*3，输出文件</p>
+<h2 id="运行指令"><a href="#运行指令" class="headerlink" title="运行指令"></a>运行指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./mic_pi</div></pre></td></tr></table></figure>
+<p>参考资料：</p>
+<ul>
+<li>MIC高性能计算编程指南，王恩东，中国水利水电出版社，2012</li>
+<li><a href="http://scc.ustc.edu.cn/zlsc/pxjz/201511/W020151129773715404512.pdf" target="_blank" rel="external">Intel C/C++、Fortran编译器的使用</a></li>
+<li><a href="http://scc.ustc.edu.cn/zlsc/chinagrid/201409/W020140923317024194211.pdf" target="_blank" rel="external">Intel MIC高性能计算服务器使用指南</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MIC/" rel="tag"># MIC</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/10/JPEG函数库使用指南/" rel="next" title="JPEG函数库使用指南">
+                <i class="fa fa-chevron-left"></i> JPEG函数库使用指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/11/MIC-基本语法/" rel="prev" title="MIC-基本语法">
+                MIC-基本语法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/02/11/MIC-Hello-world/"
+     data-title="MIC-HelloWorld"
+     data-content=""
+     data-url="http://yoursite.com/2017/02/11/MIC-Hello-world/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/11/MIC-Hello-world/"
+           data-title="MIC-HelloWorld" data-url="http://yoursite.com/2017/02/11/MIC-Hello-world/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar/boy.png"
+               alt="Gaox" />
+          <p class="site-author-name" itemprop="name">Gaox</p>
+          <p class="site-description motion-element" itemprop="description">这是一个小子的个人blog，嗯，没啥会的~</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhejianggaoxiao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://zhihu.com/people/zhejianggaoxiao" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/zhejiangblue" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://music.163.com/#/user/home?id=35617743" target="_blank" title="网易云">
+                  
+                    <i class="fa fa-fw fa-music"></i>
+                  
+                  网易云
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MIC高性能计算简介"><span class="nav-number">1.</span> <span class="nav-text">MIC高性能计算简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#现状简介"><span class="nav-number">1.1.</span> <span class="nav-text">现状简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#目前主流的集群架构系统："><span class="nav-number">1.1.1.</span> <span class="nav-text">目前主流的集群架构系统：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算机体系结构分类（根据指令与数据流，Flynn分类法）"><span class="nav-number">1.1.2.</span> <span class="nav-text">计算机体系结构分类（根据指令与数据流，Flynn分类法）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目前高性能计算技术（并行计算的硬件）"><span class="nav-number">1.1.3.</span> <span class="nav-text">目前高性能计算技术（并行计算的硬件）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MIC（Many-Integrated-Core）"><span class="nav-number">1.2.</span> <span class="nav-text">MIC（Many Integrated Core）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是MIC"><span class="nav-number">1.2.1.</span> <span class="nav-text">什么是MIC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GPGPU与MIC比较"><span class="nav-number">1.2.2.</span> <span class="nav-text">GPGPU与MIC比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MIC编程"><span class="nav-number">1.2.3.</span> <span class="nav-text">MIC编程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MIC编程模型"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">MIC编程模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MIC应用模式"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">MIC应用模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#CPU为中心模式："><span class="nav-number">1.2.3.2.1.</span> <span class="nav-text">CPU为中心模式：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MIC为中心模式"><span class="nav-number">1.2.3.2.2.</span> <span class="nav-text">MIC为中心模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CPU与MIC对等模式"><span class="nav-number">1.2.3.2.3.</span> <span class="nav-text">CPU与MIC对等模式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU与MIC的工作分配"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">CPU与MIC的工作分配</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MIC原生程序示例—计算Pi"><span class="nav-number">2.</span> <span class="nav-text">MIC原生程序示例—计算Pi</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#程序源码"><span class="nav-number">2.1.</span> <span class="nav-text">程序源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译指令"><span class="nav-number">2.2.</span> <span class="nav-text">编译指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行指令"><span class="nav-number">2.3.</span> <span class="nav-text">运行指令</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gaox</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zhejiangblue"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('footer')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js?v=5.1.0"></script>
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OhVoAvGprlcQcE874iz42HN5-gzGzoHsz", "HYUlzEMlDdpDTLpJ4Ll67Daj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

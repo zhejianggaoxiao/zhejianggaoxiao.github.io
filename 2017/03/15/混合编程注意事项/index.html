@@ -1,0 +1,1208 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="C,Fortran," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="这篇文档主要对C和Fortran混合编程的注意事项做一个补充。
+&amp;lt;!—more—&amp;gt;
+函数还是子例程函数在C和Fortran中有不同的含义：
+
+在 C 中，所有的子程序都是函数(function)；但 void 函数不会返回值。
+在 Fortran 中，函数(function)会传递一个返回值，但子例程(subroutine)一般不传递返回值。
+
+因此，
+
+当 Fortran 例程调用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="混合编程注意事项">
+<meta property="og:url" content="http://yoursite.com/2017/03/15/混合编程注意事项/index.html">
+<meta property="og:site_name" content="Who are you?">
+<meta property="og:description" content="这篇文档主要对C和Fortran混合编程的注意事项做一个补充。
+&amp;lt;!—more—&amp;gt;
+函数还是子例程函数在C和Fortran中有不同的含义：
+
+在 C 中，所有的子程序都是函数(function)；但 void 函数不会返回值。
+在 Fortran 中，函数(function)会传递一个返回值，但子例程(subroutine)一般不传递返回值。
+
+因此，
+
+当 Fortran 例程调用">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/03/15/58c8fa32a3ec4.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/03/15/58c8fb7da12a0.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/03/15/58c8fd3b0b7a9.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/03/15/58c8fd7e6b2b6.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/03/15/58c9006e4c955.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/03/15/58c9014ee6d97.png">
+<meta property="og:updated_time" content="2017-03-15T09:02:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="混合编程注意事项">
+<meta name="twitter:description" content="这篇文档主要对C和Fortran混合编程的注意事项做一个补充。
+&amp;lt;!—more—&amp;gt;
+函数还是子例程函数在C和Fortran中有不同的含义：
+
+在 C 中，所有的子程序都是函数(function)；但 void 函数不会返回值。
+在 Fortran 中，函数(function)会传递一个返回值，但子例程(subroutine)一般不传递返回值。
+
+因此，
+
+当 Fortran 例程调用">
+<meta name="twitter:image" content="https://ooo.0o0.ooo/2017/03/15/58c8fa32a3ec4.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6384644433400301000',
+      author: 'xoaG'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/15/混合编程注意事项/"/>
+
+
+
+
+
+  <title> 混合编程注意事项 | Who are you? </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a7a0c4c8a6ef4131e469f6d4b9dd315c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Who are you?</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Why are you ?</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/15/混合编程注意事项/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Gaox">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar/boy.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Who are you?">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Who are you?" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                混合编程注意事项
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-15T23:28:42+08:00">
+                2017-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/15/混合编程注意事项/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/15/混合编程注意事项/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/03/15/混合编程注意事项/" class="leancloud_visitors" data-flag-title="混合编程注意事项">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇文档主要对C和Fortran混合编程的注意事项做一个补充。</p>
+<p>&lt;!—more—&gt;</p>
+<h2 id="函数还是子例程"><a href="#函数还是子例程" class="headerlink" title="函数还是子例程"></a>函数还是子例程</h2><p><strong>函数</strong>在C和Fortran中有不同的含义：</p>
+<ul>
+<li>在 C 中，所有的子程序都是函数(function)；但 <strong>void</strong> 函数不会返回值。</li>
+<li>在 Fortran 中，函数(function)会传递一个返回值，但子例程(subroutine)一般不传递返回值。</li>
+</ul>
+<p>因此，</p>
+<ul>
+<li>当 Fortran 例程调用 C 函数时：<ul>
+<li>如果被调用的 C 函数返回一个值，则将其作为函数从 Fortran 中调用。</li>
+<li>如果被调用的 C 函数不返回值，则将其作为子例程调用。</li>
+</ul>
+</li>
+<li>当 C 函数调用 Fortran 子程序时：<ul>
+<li>如果被调用的 Fortran 子程序是一个<strong>函数</strong>，则将其作为一个返回兼容数据类型的函数从 C 中调用。</li>
+<li>如果被调用的 Fortran 子程序是一个<strong>子例程</strong>，则将其作为一个返回 <strong>int</strong>（与 Fortran <strong>INTEGER*4</strong> 兼容）或 <strong>void</strong> 值的函数从 C 中调用。</li>
+</ul>
+</li>
+</ul>
+<h2 id="数据兼容性"><a href="#数据兼容性" class="headerlink" title="数据兼容性"></a>数据兼容性</h2><ul>
+<li>可以参考前一篇文档的数据类型对应关系</li>
+<li>不能按值传递数组、字符串或结构</li>
+<li>在Fortran中字符串数组长度固定，没有结束符，在C中，字符串长度可变，同时需要有一个结束符’\0’</li>
+<li>大小写问题：<ul>
+<li>Fortran大小写不敏感，可以任意使用</li>
+<li>C对大小写敏感，因此建议在C程序中，<strong>函数名全为小写</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="例程名中的下划线"><a href="#例程名中的下划线" class="headerlink" title="例程名中的下划线"></a>例程名中的下划线</h2><p>Fortran 编译器通常会在入口点定义和调用中都出现的子程序名<strong>末尾</strong>追加一个<strong>下划线 (_)</strong>。该惯例不同于具有相同的用户指定名称的 C 过程或外部变量。几乎所有 Fortran 库过程名都有两个前导下划线，以减少与用户指定的子例程名的冲突。解决方案：</p>
+<ul>
+<li>在 C 函数中，通过在函数名<strong>末尾追加下划线</strong>来更改该名称。</li>
+<li>使用 <strong>BIND(C)</strong> 属性声明来指明外部函数是 C 语言函数。</li>
+<li>使用 <strong>f95</strong> <strong>-ext_names</strong> 选项编译对无下划线的外部名称的引用。</li>
+</ul>
+<p>上面的方法只能3选1，一般采用的是第一种，第三种使用不广泛，第二种可以如下示例使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">FUNCTION ABC</div><div class="line">        EXTERNAL XYZ</div><div class="line">        BIND(C) ABC, XYZ</div></pre></td></tr></table></figure>
+<p><strong>BIND(C)</strong> 声明可从 Fortran 调用的 C 外部函数，以及可从 C 中作为参数调用的 Fortran 例程。Fortran 编译器在处理外部名称时通常不追加下划线。<strong>BIND(C)</strong> 必须出现在每个包含这样的引用的子程序中。在此处，用户不仅指定 <strong>XYZ</strong> 是外部 C 函数，而且还指定 Fortran 调用程序 <strong>ABC</strong> 应该可以从 C 函数调用。如果使用 <strong>BIND(C)</strong>，C 函数不需要在函数名末尾追加下划线。</p>
+<h2 id="数组索引与顺序"><a href="#数组索引与顺序" class="headerlink" title="数组索引与顺序"></a>数组索引与顺序</h2><p>Fortran 与 C 的数组索引和顺序不同。</p>
+<h3 id="数组索引"><a href="#数组索引" class="headerlink" title="数组索引"></a>数组索引</h3><p>C 数组总是从 0 开始，而 Fortran 数组在缺省情况下是从 1 开始。有两种常用的索引处理方法：</p>
+<ul>
+<li>可以使用 Fortran 缺省设置。</li>
+<li>可以指定 Fortran 数组 B 以 B(0) 开始，如<code>INTEGER B(0:2)</code></li>
+</ul>
+<h3 id="数组顺序"><a href="#数组顺序" class="headerlink" title="数组顺序"></a>数组顺序</h3><ul>
+<li><p>Fortran 数组按列主顺序存储：<strong>A(3,2)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">A(1,1)  A(2,1)  A(3,1)  A(1,2)  A(2,2)  A(3,2)</div></pre></td></tr></table></figure>
+</li>
+<li><p>C 数组按行主顺序存储：<strong>A[3][2]</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">A[0][0] A[0][1] A[1][0] A[1][1] A[2][0] A[2][1]</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这对于一维数组不存在任何问题。但对于多维数组，应注意下标在所有引用和声明中是如何出现和使用的－可能需要做些调整。</p>
+<p>例如，在 C 中进行部分矩阵操作，而后在 Fortran 中完成余下部分，这样做可能会产生混淆。最好是将<strong>整个</strong>数组传递给另一语言中的例程，然后在该例程中执行<strong>所有</strong>矩阵操作，以避免在 C 和 Fortran 中各执行部分操作的情况。</p>
+<h2 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h2><h3 id="按引用传递参数"><a href="#按引用传递参数" class="headerlink" title="按引用传递参数"></a>按引用传递参数</h3><ol>
+<li><p>简单数据类型（非COMPLEX或CHARATER串）</p>
+<ul>
+<li>C调用Fortran，实参使用指针（&amp;a），形参不需要特殊说明，默认为引用</li>
+<li>Fortran调用C，实参不需要特殊说明，默认为引用，形参使用指针（*a）</li>
+</ul>
+</li>
+<li><p>COMPLEX</p>
+<p>将 Fortran COMPLEX 数据项作为指针传递到具有两种浮点或两种双精度数据类型的 <strong>C 结构体</strong></p>
+<p><img src="https://ooo.0o0.ooo/2017/03/15/58c8fa32a3ec4.png" alt="58c8fa32a3ec4.png"></p>
+</li>
+<li><p>字符串</p>
+<p>由于没有标准接口，因此不推荐在 C 与 Fortran 例程间传递字符串。</p>
+</li>
+<li><p>一维数组</p>
+<ul>
+<li>C调用Fortran，传递地址</li>
+<li>Fortran调用C，传递引用（默认不需更改）</li>
+</ul>
+</li>
+<li><p>二维数组</p>
+<p>注意<strong>行列转换</strong>，实质就是一个是<code>(i, j ,k)</code>，另外一个是<code>(k, j, i)</code></p>
+<p><img src="https://ooo.0o0.ooo/2017/03/15/58c8fb7da12a0.png" alt="58c8fb7da12a0.png"></p>
+</li>
+<li><p>结构体</p>
+<ul>
+<li>只要相应的元素是兼容的，便可以将 C 和 Fortran 95 派生类型传递给彼此的例程。<strong>f95</strong> 接受传统的 <strong>STRUCTURE</strong> 语句</li>
+<li>Fortran 95 标准要求派生类型定义中有 <strong>SEQUENCE</strong> 语句，以确保编译器保持存储序列的顺序。</li>
+</ul>
+</li>
+<li><p>指针（传递指针就会在C中形成指针的指针）</p>
+<ul>
+<li><p>由于 Fortran 例程按引用传递参数，因此可将 FORTRAN 77 (Cray) 指针作为指针的指针传递给 C 例程。</p>
+<p><img src="https://ooo.0o0.ooo/2017/03/15/58c8fd3b0b7a9.png" alt="58c8fd3b0b7a9.png"></p>
+</li>
+<li><p>C 指针与 Fortran 95 <strong>标量</strong>指针兼容，但与<strong>数组</strong>指针不兼容。</p>
+<p><img src="https://ooo.0o0.ooo/2017/03/15/58c8fd7e6b2b6.png" alt="58c8fd7e6b2b6.png"></p>
+<p>Cray 与 Fortran 95 指针间的主要区别是 Cray 指针的目标始终是已命名的。在许多上下文中，声明 Fortran 95 指针会自动标识其目标。另外，被调用 C 例程还需要显式 <strong>INTERFACE</strong> 块。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="按值传递参数"><a href="#按值传递参数" class="headerlink" title="按值传递参数"></a>按值传递参数</h3><ol>
+<li><p>从 C 中调用时，Fortran 95 程序应在伪参数中使用 <strong>VALUE</strong> 属性，并且应为从 Fortran 95 中调用的 C 例程提供一个 <strong>INTERFACE</strong> 块</p>
+<p>在 C 与 Fortran 95 之间传递简单数据元素</p>
+<p><img src="https://ooo.0o0.ooo/2017/03/15/58c9006e4c955.png" alt="58c9006e4c955.png"></p>
+</li>
+<li><p>对于传统 Fortran 77，按值调用仅对简单数据可用，并且只能为调用 C 例程的 Fortran 77 例程所用。无法做到让 C 例程调用 Fortran 77 例程并按值传递参数。数组、字符串或结构最好是按引用传递。</p>
+<p>要将值从 Fortran 77 例程传递到 C 例程，请使用非标准 Fortran 函数 <strong>%VAL(</strong>arg<strong>)</strong> 作为调用中的一个参数。</p>
+<p><img src="https://ooo.0o0.ooo/2017/03/15/58c9014ee6d97.png" alt="58c9014ee6d97.png"></p>
+</li>
+</ol>
+<h2 id="返回值类型"><a href="#返回值类型" class="headerlink" title="返回值类型"></a>返回值类型</h2><h3 id="返回简单数据类型"><a href="#返回简单数据类型" class="headerlink" title="返回简单数据类型"></a>返回简单数据类型</h3><p>直接返回</p>
+<h3 id="返回COMPLEX数据"><a href="#返回COMPLEX数据" class="headerlink" title="返回COMPLEX数据"></a>返回COMPLEX数据</h3><p>具体参见<a href="https://docs.oracle.com/cd/E19205-01/820-1204/6nct259sc/index.html" target="_blank" rel="external">Here</a>，11.5.2部分</p>
+<h3 id="返回CHARACTER串"><a href="#返回CHARACTER串" class="headerlink" title="返回CHARACTER串"></a>返回CHARACTER串</h3><p>不建议传递字符串，具体参见<a href="https://docs.oracle.com/cd/E19205-01/820-1204/6nct259sc/index.html" target="_blank" rel="external">Here</a>，11.5.3部分</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://docs.oracle.com/cd/E19205-01/820-1204/6nct259sc/index.html" target="_blank" rel="external">C-Fortran 接口</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C</a>
+          
+            <a href="/tags/Fortran/" rel="tag"># Fortran</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/15/C与Fortran混合编程/" rel="next" title="C与Fortran混合编程">
+                <i class="fa fa-chevron-left"></i> C与Fortran混合编程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/16/vim插件进阶/" rel="prev" title="vim插件进阶">
+                vim插件进阶 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/03/15/混合编程注意事项/"
+     data-title="混合编程注意事项"
+     data-content=""
+     data-url="http://yoursite.com/2017/03/15/混合编程注意事项/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/15/混合编程注意事项/"
+           data-title="混合编程注意事项" data-url="http://yoursite.com/2017/03/15/混合编程注意事项/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar/boy.png"
+               alt="Gaox" />
+          <p class="site-author-name" itemprop="name">Gaox</p>
+          <p class="site-description motion-element" itemprop="description">这是一个小子的个人blog，嗯，没啥会的~</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhejianggaoxiao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://zhihu.com/people/zhejianggaoxiao" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/zhejiangblue" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://music.163.com/#/user/home?id=35617743" target="_blank" title="网易云">
+                  
+                    <i class="fa fa-fw fa-music"></i>
+                  
+                  网易云
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数还是子例程"><span class="nav-number">1.</span> <span class="nav-text">函数还是子例程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据兼容性"><span class="nav-number">2.</span> <span class="nav-text">数据兼容性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例程名中的下划线"><span class="nav-number">3.</span> <span class="nav-text">例程名中的下划线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组索引与顺序"><span class="nav-number">4.</span> <span class="nav-text">数组索引与顺序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数组索引"><span class="nav-number">4.1.</span> <span class="nav-text">数组索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数组顺序"><span class="nav-number">4.2.</span> <span class="nav-text">数组顺序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数传递"><span class="nav-number">5.</span> <span class="nav-text">参数传递</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#按引用传递参数"><span class="nav-number">5.1.</span> <span class="nav-text">按引用传递参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按值传递参数"><span class="nav-number">5.2.</span> <span class="nav-text">按值传递参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#返回值类型"><span class="nav-number">6.</span> <span class="nav-text">返回值类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#返回简单数据类型"><span class="nav-number">6.1.</span> <span class="nav-text">返回简单数据类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#返回COMPLEX数据"><span class="nav-number">6.2.</span> <span class="nav-text">返回COMPLEX数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#返回CHARACTER串"><span class="nav-number">6.3.</span> <span class="nav-text">返回CHARACTER串</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gaox</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zhejiangblue"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('footer')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js?v=5.1.0"></script>
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OhVoAvGprlcQcE874iz42HN5-gzGzoHsz", "HYUlzEMlDdpDTLpJ4Ll67Daj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

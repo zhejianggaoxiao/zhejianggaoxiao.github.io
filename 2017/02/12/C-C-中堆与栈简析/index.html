@@ -1,0 +1,1178 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="C/C++," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="关于C/C++中堆与栈的问题，在之前编程过程中遇到过好多次，每次看一遍就忘了，趁现在有空，就将这个好好的梳理一遍。参考来源已附文末，感谢前辈~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C/C++：内存中堆与栈简析">
+<meta property="og:url" content="http://yoursite.com/2017/02/12/C-C-中堆与栈简析/index.html">
+<meta property="og:site_name" content="Who are you?">
+<meta property="og:description" content="关于C/C++中堆与栈的问题，在之前编程过程中遇到过好多次，每次看一遍就忘了，趁现在有空，就将这个好好的梳理一遍。参考来源已附文末，感谢前辈~">
+<meta property="og:updated_time" content="2017-02-12T13:21:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C/C++：内存中堆与栈简析">
+<meta name="twitter:description" content="关于C/C++中堆与栈的问题，在之前编程过程中遇到过好多次，每次看一遍就忘了，趁现在有空，就将这个好好的梳理一遍。参考来源已附文末，感谢前辈~">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6384644433400301000',
+      author: 'xoaG'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/02/12/C-C-中堆与栈简析/"/>
+
+
+
+
+
+  <title> C/C++：内存中堆与栈简析 | Who are you? </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a7a0c4c8a6ef4131e469f6d4b9dd315c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Who are you?</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Why are you ?</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/12/C-C-中堆与栈简析/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Gaox">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar/boy.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Who are you?">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Who are you?" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                C/C++：内存中堆与栈简析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-12T20:21:02+08:00">
+                2017-02-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Study/" itemprop="url" rel="index">
+                    <span itemprop="name">Study</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/12/C-C-中堆与栈简析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/12/C-C-中堆与栈简析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/12/C-C-中堆与栈简析/" class="leancloud_visitors" data-flag-title="C/C++：内存中堆与栈简析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>关于C/C++中堆与栈的问题，在之前编程过程中遇到过好多次，每次看一遍就忘了，趁现在有空，就将这个好好的梳理一遍。参考来源已附文末，感谢前辈~</p>
+<a id="more"></a>
+<h1 id="拓：数据结构中的堆与栈"><a href="#拓：数据结构中的堆与栈" class="headerlink" title="拓：数据结构中的堆与栈"></a>拓：数据结构中的堆与栈</h1><p>对于堆与栈，其细分有两类：一类是内存中的，而另一类是数据结构中的。对于数据结构中的堆与栈，其比较简单，我们在此就大致介绍一下。</p>
+<p>既然属于数据结构，那么堆与栈应该就是存储数据的一种方式：</p>
+<h2 id="栈—叠盘子"><a href="#栈—叠盘子" class="headerlink" title="栈—叠盘子"></a>栈—叠盘子</h2><p>   数据就像盘子一样，刚开始是从下往上叠，但是需要使用时，就是从上往下区，遵循“后进先出”的原则。</p>
+<h2 id="堆—书架取书"><a href="#堆—书架取书" class="headerlink" title="堆—书架取书"></a>堆—书架取书</h2><ul>
+<li><p>堆的实现通过构造<strong>二叉堆</strong>（binary heap），实为<a href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E5%8F%89%E6%A0%91" target="_blank" rel="external">二叉树</a>的一种；由于其应用的普遍性，当不加限定时，均指该数据结构的这种实现。这种数据结构具有以下性质。</p>
+<ul>
+<li>任意节点小于（或大于）它的所有后裔，最小元（或最大元）在堆的根上（<strong>堆序性</strong>）。</li>
+<li>堆总是一棵<a href="https://zh.wikipedia.org/wiki/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91" target="_blank" rel="external">完全树</a>。即除了最底层，其他层的节点都被元素填满，且最底层尽可能地从左到右填入。</li>
+</ul>
+</li>
+<li><p>将根节点最大的堆叫做<strong>最大堆</strong>或<strong>大根堆</strong>，根节点最小的堆叫做<strong>最小堆</strong>或<strong>小根堆</strong>。常见的堆有<a href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E5%8F%89%E5%A0%86" target="_blank" rel="external">二叉堆</a>、<a href="https://zh.wikipedia.org/wiki/%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E5%A0%86" target="_blank" rel="external">斐波那契堆</a>等</p>
+<ul>
+<li>由于堆的这个特性，常用来实现优先队列，堆的存取是随意，这就如同我们在图书馆的书架上取书，虽然书的摆放是有顺序的，但是我们想取任意一本时不必像栈一样，先取出前面所有的书，书架这种机制不同于箱子，我们可以直接取出我们想要的书。</li>
+</ul>
+<p>​</p>
+</li>
+</ul>
+<h1 id="程序的内存分配"><a href="#程序的内存分配" class="headerlink" title="程序的内存分配"></a>程序的内存分配</h1><p>一般而言，由C/C++编译的程序其占用的内存可以分为以下5类：</p>
+<h2 id="栈区（stack）"><a href="#栈区（stack）" class="headerlink" title="栈区（stack）"></a>栈区（stack）</h2><ul>
+<li><p>由编译器自动分配释放 ，存放函数参数值，局部变量的值等。其操作方式类似于<a href="http://lib.csdn.net/base/datastructure" target="_blank" rel="external">数据结构</a>中的栈。 </p>
+</li>
+<li><p>通常是用那些在编译期间就能<strong>确定</strong>其存储大小的变量的存储区，用于在函数作用域内创建、在离开作用域后自动销毁的变量的存储区。通常是<strong>局部变量、函数参数</strong>等的存储区。它的存储空间是连续的，两个紧挨着的定义的局部变量，它们的存储空间是紧挨着的。栈的大小是有限的，通常Visual C++编译器默认栈的大小是1M（或2M），所以不要定义int a[1000000]这样的超大数组。</p>
+</li>
+</ul>
+<h2 id="堆区（heap）"><a href="#堆区（heap）" class="headerlink" title="堆区（heap）"></a>堆区（heap）</h2><ul>
+<li>一般由程序员分配释放 ， 若程序员不释放，程序结束时可能由OS回收 。注意它与数据结构中的堆是两回事，分配方式倒是类似于链表。 </li>
+<li>通常是用于那些在编译期间<strong>不能确定</strong>存储大小的变量存储区，它的存储空间是不连续的，一般用<strong>malloc（或new）</strong>函数来分配内存块，并且需要要free（或delete）释放内存。如果程序员没有释放掉，那么就会出现常说的内存泄漏问题。需要注意的是，两个紧挨定义的指针变量，所指向的malloc出来的内存并不一定是紧挨着的。另外需要注意的一点是，堆的大小几乎是不受限制的，理论上每个程序最大可达4GB。</li>
+</ul>
+<h2 id="全局区（静态区）-static"><a href="#全局区（静态区）-static" class="headerlink" title="全局区（静态区）(static)"></a>全局区（静态区）(static)</h2><ul>
+<li>全局变量和静态变量的存储是放在一块的，初始化的全局变量和静态变量在一块区域， 未初始化的全局变量和未初始化的静态变量在相邻的另一块区域。程序结束后由系统释放 。</li>
+<li>和“栈”一样，通常是用于那些在编译期间就能<strong>确定</strong>存储大小的变量的存储区，但它用于的是在整个程序运行期间都可见的全局变量和静态变量。 </li>
+</ul>
+<h2 id="常量存储区"><a href="#常量存储区" class="headerlink" title="常量存储区"></a>常量存储区</h2><ul>
+<li>常量字符串就是放在这里的。 程序结束后由系统释放</li>
+<li>和“全局/静态存储区”一样，通常是用于那些在编译期间就能<strong>确定</strong>存储大小的常量存储区，并且在程序运行期间，存储区内的常量也是全局可见的。这是一块比较特殊的存储区，它们里面放的是常量，<strong>不允许被修改</strong>。 </li>
+</ul>
+<h2 id="程序代码区"><a href="#程序代码区" class="headerlink" title="程序代码区"></a>程序代码区</h2><ul>
+<li>存放函数体的二进制代码</li>
+</ul>
+<h2 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> a = <span class="number">0</span>;  <span class="comment">//全局初始化区 </span></div><div class="line"><span class="keyword">char</span> *p1;   <span class="comment">//全局未初始化区 </span></div><div class="line">main() </div><div class="line">&#123; </div><div class="line">    <span class="keyword">int</span> b; <span class="comment">//栈 </span></div><div class="line">    <span class="keyword">char</span> s[] = <span class="string">"abc"</span>; <span class="comment">//栈 </span></div><div class="line">    <span class="keyword">char</span> *p2; <span class="comment">//栈 </span></div><div class="line">    <span class="keyword">char</span> *p3 = <span class="string">"123456"</span>; <span class="comment">//123456\0在常量区，p3在栈上。 </span></div><div class="line">    <span class="keyword">static</span> <span class="keyword">int</span> c =<span class="number">0</span>； <span class="comment">//全局（静态）初始化区 </span></div><div class="line">    p1 = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(<span class="number">10</span>); <span class="comment">//堆 </span></div><div class="line">    p2 = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(<span class="number">20</span>);  <span class="comment">//堆 </span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="内存中堆栈的区别"><a href="#内存中堆栈的区别" class="headerlink" title="内存中堆栈的区别"></a>内存中堆栈的区别</h1><h2 id="申请和回收方式不同"><a href="#申请和回收方式不同" class="headerlink" title="申请和回收方式不同"></a>申请和回收方式不同</h2><ol>
+<li>申请方式：<ul>
+<li>栈：系统自动分配空间</li>
+<li>堆：程序员自己分配</li>
+</ul>
+</li>
+<li>回收方式：<ul>
+<li>栈：系统自动回收，因而其生命周期只是函数作用域内，离开作用域便自动销毁</li>
+<li>堆：程序员人为释放，如果不人为释放的话可能会造成内存泄漏。</li>
+</ul>
+</li>
+</ol>
+<h2 id="申请后系统的响应不同"><a href="#申请后系统的响应不同" class="headerlink" title="申请后系统的响应不同"></a>申请后系统的响应不同</h2><ul>
+<li><p>栈：只要栈的剩余空间大于所申请空间，系统将为程序提供内存，否则将报异常提示<strong>栈溢出</strong>（stack overflow）。</p>
+</li>
+<li><p>堆：首先应该知道操作系统有一个记录空闲内存地址的<strong>链表</strong>，当系统收到程序的申请时，会遍历该链表，寻找第一个空间大于所申请空间的堆结点，然后将该结点从空闲结点链表中删除，并将该结点的空间分配给程序，另外，对于大多数系统，会在这块内存空间中的首地址处记录本次分配的大小，这样，代码中的<code>delete</code>语句才能正确的释放本内存空间。另外，由于找到的堆结点的大小不一定正好等于申请的大小，系统会自动的将多余的那部分重新放入空闲链表中。 </p>
+<p>从而可以看出，堆在申请后还需要一些后续工作，因而效率就不想栈那样高了。</p>
+</li>
+</ul>
+<h2 id="申请效率的不同"><a href="#申请效率的不同" class="headerlink" title="申请效率的不同"></a>申请效率的不同</h2><ul>
+<li><strong>栈</strong>：由系统自动分配，速度较快。但程序员是无法控制的。</li>
+<li><strong>堆</strong>：是由new或malloc分配的内存，一般速度比较慢，而且容易产生内存碎片，不过用起来最方便。</li>
+</ul>
+<h2 id="申请大小的限制不同"><a href="#申请大小的限制不同" class="headerlink" title="申请大小的限制不同"></a>申请大小的限制不同</h2><ul>
+<li><p><strong>栈</strong>：在Windows下栈是<strong>向低地址扩展</strong>的数据结构，是一块连续的内存的区域。这句话的意思是栈顶的地址和栈的最大容量是系统预先规定好的，在</p>
+<p>WINDOWS下，栈的大小是<strong>2M</strong>（也有的说是1M，总之是一个编译时就确定的常数），如果申请的空间超过栈的剩余空间时，将提示<strong>overflow</strong>。因此，能从栈获得的空间较小。 </p>
+</li>
+<li><p><strong>堆</strong>：堆是<strong>向高地址扩展</strong>的数据结构，是不连续的内存区域。这是由于系统是用链表来存储的空闲内存地址的，自然是不连续的，而链表的遍历方向是由低地址向高地址。堆的大小受限于计算机系统中有效的虚拟内存。由此可见，堆获得的空间比较灵活，也比较大。</p>
+</li>
+</ul>
+<h2 id="堆栈中的存储内容不同"><a href="#堆栈中的存储内容不同" class="headerlink" title="堆栈中的存储内容不同"></a>堆栈中的存储内容不同</h2><ul>
+<li><strong>栈</strong>： 在函数调用时，第一个进栈的是<strong>主函数中函数调用后的下一条指令</strong>（函数调用语句的下一条可执行语句）的地址，然后是函数的各个参数，在大多数的C编译器中，参数是由右往左入栈的，然后是<strong>函数中的局部变量</strong>。注意静态变量是不入栈的。 【先进后出】<br>当本次函数调用结束后，局部变量先出栈，然后是参数，最后栈顶指针指向最开始存的地址，也就是主函数中的下一条指令，程序由该点继续运行。 </li>
+<li><strong>堆</strong>：一般是在堆的头部用一个字节存放堆的大小。堆中的具体内容由程序员安排。</li>
+</ul>
+<h2 id="堆栈的存取效率不同"><a href="#堆栈的存取效率不同" class="headerlink" title="堆栈的存取效率不同"></a>堆栈的存取效率不同</h2><p>在数据相同的情况下，在栈上的数据比指针所指向的数据存取(例如堆)要快。</p>
+<p><strong>Tip</strong>：</p>
+<p>堆和栈的区别可以引用一位前辈的比喻来看出： </p>
+<ul>
+<li>使用栈就象我们去饭馆里吃饭，只管点菜（发出申请）、付钱、和吃（使用），吃饱了就走，不必理会切菜、洗菜等准备工作和洗碗、刷锅等扫尾工作，它的好处是快捷，但是自由度小。 </li>
+<li>使用堆就象是自己动手做喜欢吃的菜肴，比较麻烦，但是比较符合自己的口味，而且自由度大。</li>
+</ul>
+<h1 id="C语言内存管理的几个规则"><a href="#C语言内存管理的几个规则" class="headerlink" title="C语言内存管理的几个规则"></a>C语言内存管理的几个规则</h1><ol>
+<li>用malloc或new申请内存之后，应该立即检查指针值是否为<strong>NULL</strong>。防止使用指针值为NULL的内存；</li>
+<li>不要忘记为数组和动态内存<strong>赋初值</strong>。防止将未被初始化的内存作为右值使用；</li>
+<li>避免数组或指针的下标越界，特别要当心发生“多1”或者“少1”操作；</li>
+<li>动态内存的申请与释放必须配对，防止内存泄漏；</li>
+<li>用free或delete释放了内存之后，立即将指针设置为NULL，防止产生“野指针”。</li>
+</ol>
+<h1 id="常见内存错误及其处理方法"><a href="#常见内存错误及其处理方法" class="headerlink" title="常见内存错误及其处理方法"></a>常见内存错误及其处理方法</h1><ol>
+<li><p>内存分配未成功，却使用了它</p>
+<p>编程新手常犯这种错误，因为他们没有意识到内存分配会不成功。常用解决办法是，在使用内存之前检查指针是否为NULL。如果指针p是函数的参数，那么在函数的入口处用<strong>assert(p!=NULL)</strong>进行检查。如果是用malloc或new来申请内存，应该用<strong>if(p==NULL) 或if(p!=NULL)</strong>进行防错处理。</p>
+</li>
+<li><p>内存分配虽然成功，但是<strong>尚未初始化</strong>就引用它</p>
+<p>犯这种错误主要有两个起因：一是没有初始化的观念；二是误以为内存的缺省初值全为零，导致引用初值错误（例如数组）。</p>
+<p>内存的缺省初值究竟是什么并没有统一的标准，尽管有些时候为零值，我们宁可信其无不可信其有。所以无论用何种方式创建数组，都别忘了赋初值，即便是赋零值也不可省略，不要嫌麻烦。</p>
+</li>
+<li><p>内存分配成功并且已经初始化，但操作越过了内存的边界</p>
+<p>例如在使用数组时经常发生下标“多1”或者“少1”的操作。特别是在for循环语句中，循环次数很容易搞错，导致数组操作越界</p>
+</li>
+<li><p>忘记了释放内存，造成内存泄露</p>
+<p>含有这种错误的函数每被调用一次就丢失一块内存。刚开始时系统的内存充足，你看不到错误。终有一次程序突然死掉，系统出现提示：内存耗尽。</p>
+<p>动态内存的申请与释放必须配对，程序中malloc与free的使用次数一定要相同，否则肯定有错误（new/delete同理）</p>
+</li>
+<li><p>释放了内存却继续使用它</p>
+<ul>
+<li>程序中的对象调用关系过于复杂，实在难以搞清楚某个对象究竟是否已经释放了内存，此时应该重新设计数据结构，从根本上解决对象管理的混乱局面。</li>
+<li>函数的return语句写错了，注意<strong>不要返回指向“栈内存”的“指针”或者“引用”</strong>，因为该内存在函数体结束时被自动销毁。</li>
+<li>使用free或delete释放了内存后，没有将指针设置为NULL。导致产生“野指针”</li>
+</ul>
+</li>
+</ol>
+<p>综上，内存错误可概括为：<strong>分配—初始化—越界—释放—NULL</strong></p>
+<p>参考资料：</p>
+<ul>
+<li><a href="http://www.cnblogs.com/VIPler/p/4342217.html" target="_blank" rel="external">C/C++内存存储问题</a></li>
+<li><a href="http://blog.csdn.net/what_lei/article/details/52701499" target="_blank" rel="external">C/C++编译的程序占用的内存解析</a></li>
+<li><a href="http://www.cleey.com/blog/single/id/776.html" target="_blank" rel="external">堆和栈的区别 之 数据结构和内存</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C-C/" rel="tag"># C/C++</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/11/Log-of-BZ/" rel="next" title="Log of BanZhuan">
+                <i class="fa fa-chevron-left"></i> Log of BanZhuan
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/15/C-C-文件读写/" rel="prev" title="C/C++文件读写">
+                C/C++文件读写 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/02/12/C-C-中堆与栈简析/"
+     data-title="C/C++：内存中堆与栈简析"
+     data-content=""
+     data-url="http://yoursite.com/2017/02/12/C-C-中堆与栈简析/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/12/C-C-中堆与栈简析/"
+           data-title="C/C++：内存中堆与栈简析" data-url="http://yoursite.com/2017/02/12/C-C-中堆与栈简析/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar/boy.png"
+               alt="Gaox" />
+          <p class="site-author-name" itemprop="name">Gaox</p>
+          <p class="site-description motion-element" itemprop="description">这是一个小子的个人blog，嗯，没啥会的~</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhejianggaoxiao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://zhihu.com/people/zhejianggaoxiao" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/zhejiangblue" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://music.163.com/#/user/home?id=35617743" target="_blank" title="网易云">
+                  
+                    <i class="fa fa-fw fa-music"></i>
+                  
+                  网易云
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#拓：数据结构中的堆与栈"><span class="nav-number">1.</span> <span class="nav-text">拓：数据结构中的堆与栈</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#栈—叠盘子"><span class="nav-number">1.1.</span> <span class="nav-text">栈—叠盘子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆—书架取书"><span class="nav-number">1.2.</span> <span class="nav-text">堆—书架取书</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#程序的内存分配"><span class="nav-number">2.</span> <span class="nav-text">程序的内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#栈区（stack）"><span class="nav-number">2.1.</span> <span class="nav-text">栈区（stack）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆区（heap）"><span class="nav-number">2.2.</span> <span class="nav-text">堆区（heap）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全局区（静态区）-static"><span class="nav-number">2.3.</span> <span class="nav-text">全局区（静态区）(static)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常量存储区"><span class="nav-number">2.4.</span> <span class="nav-text">常量存储区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#程序代码区"><span class="nav-number">2.5.</span> <span class="nav-text">程序代码区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例："><span class="nav-number">2.6.</span> <span class="nav-text">示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存中堆栈的区别"><span class="nav-number">3.</span> <span class="nav-text">内存中堆栈的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#申请和回收方式不同"><span class="nav-number">3.1.</span> <span class="nav-text">申请和回收方式不同</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#申请后系统的响应不同"><span class="nav-number">3.2.</span> <span class="nav-text">申请后系统的响应不同</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#申请效率的不同"><span class="nav-number">3.3.</span> <span class="nav-text">申请效率的不同</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#申请大小的限制不同"><span class="nav-number">3.4.</span> <span class="nav-text">申请大小的限制不同</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆栈中的存储内容不同"><span class="nav-number">3.5.</span> <span class="nav-text">堆栈中的存储内容不同</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆栈的存取效率不同"><span class="nav-number">3.6.</span> <span class="nav-text">堆栈的存取效率不同</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C语言内存管理的几个规则"><span class="nav-number">4.</span> <span class="nav-text">C语言内存管理的几个规则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常见内存错误及其处理方法"><span class="nav-number">5.</span> <span class="nav-text">常见内存错误及其处理方法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gaox</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zhejiangblue"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('footer')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js?v=5.1.0"></script>
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OhVoAvGprlcQcE874iz42HN5-gzGzoHsz", "HYUlzEMlDdpDTLpJ4Ll67Daj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

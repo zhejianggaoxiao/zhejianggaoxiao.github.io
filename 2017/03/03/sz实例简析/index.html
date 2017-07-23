@@ -1,0 +1,1068 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="sz," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="这篇文档主要对sz的example中的4个源代码进行简要分析学习，这里包括C接口的testdouble_compress.c和testdouble_decompress.c，以及Fortran接口的testdouble_compress.f90和testdouble_decompress.f90。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sz实例简析">
+<meta property="og:url" content="http://yoursite.com/2017/03/03/sz实例简析/index.html">
+<meta property="og:site_name" content="Who are you?">
+<meta property="og:description" content="这篇文档主要对sz的example中的4个源代码进行简要分析学习，这里包括C接口的testdouble_compress.c和testdouble_decompress.c，以及Fortran接口的testdouble_compress.f90和testdouble_decompress.f90。">
+<meta property="og:updated_time" content="2017-03-07T14:05:56.058Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sz实例简析">
+<meta name="twitter:description" content="这篇文档主要对sz的example中的4个源代码进行简要分析学习，这里包括C接口的testdouble_compress.c和testdouble_decompress.c，以及Fortran接口的testdouble_compress.f90和testdouble_decompress.f90。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6384644433400301000',
+      author: 'xoaG'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/03/sz实例简析/"/>
+
+
+
+
+
+  <title> sz实例简析 | Who are you? </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a7a0c4c8a6ef4131e469f6d4b9dd315c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Who are you?</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Why are you ?</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/03/sz实例简析/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Gaox">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar/boy.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Who are you?">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Who are you?" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                sz实例简析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-03T07:01:04+08:00">
+                2017-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/data-compress/" itemprop="url" rel="index">
+                    <span itemprop="name">data compress</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/03/sz实例简析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/03/sz实例简析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/03/03/sz实例简析/" class="leancloud_visitors" data-flag-title="sz实例简析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇文档主要对sz的example中的4个源代码进行简要分析学习，这里包括C接口的<code>testdouble_compress.c</code>和<code>testdouble_decompress.c</code>，以及Fortran接口的<code>testdouble_compress.f90</code>和<code>testdouble_decompress.f90</code>。</p>
+<a id="more"></a>
+<h1 id="C-接口实例"><a href="#C-接口实例" class="headerlink" title="C 接口实例"></a>C 接口实例</h1><h2 id="压缩实例分析"><a href="#压缩实例分析" class="headerlink" title="压缩实例分析"></a>压缩实例分析</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> *  @file test_compress.c</div><div class="line"> *  @author Sheng Di</div><div class="line"> *  @date April, 2015</div><div class="line"> *  @brief This is an example of using compression interface</div><div class="line"> *  (C) 2015 by Mathematics and Computer Science (MCS), Argonne National Laboratory.</div><div class="line"> *      See COPYRIGHT in top-level directory.</div><div class="line"> */</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">//sz所需的头文件 </span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"sz.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"rw.h"</span></span></div><div class="line"></div><div class="line"><span class="comment">//此部分内容用于计算time cost，可忽略</span></div><div class="line"><span class="keyword">struct</span> timeval startTime;</div><div class="line"><span class="keyword">struct</span> timeval endTime;  <span class="comment">/* Start and end times */</span></div><div class="line"><span class="keyword">struct</span> timeval costStart; <span class="comment">/*only used for recording the cost*/</span></div><div class="line"><span class="keyword">double</span> totalCost = <span class="number">0</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">cost_start</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">        gettimeofday(&amp;costStart, <span class="literal">NULL</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">cost_end</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">        <span class="keyword">double</span> elapsed;</div><div class="line">        <span class="keyword">struct</span> timeval costEnd;</div><div class="line">        gettimeofday(&amp;costEnd, <span class="literal">NULL</span>);</div><div class="line">        elapsed = ((costEnd.tv_sec*<span class="number">1000000</span>+costEnd.tv_usec)-(costStart.tv_sec*<span class="number">1000000</span>+costStart.tv_usec))/<span class="number">1000000.0</span>;</div><div class="line">        totalCost += elapsed;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//此部分为主程序</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[])</span></span></div><div class="line">&#123;   </div><div class="line">    <span class="comment">//最高支持5维，不赋值默认为0</span></div><div class="line">    <span class="keyword">int</span> r5=<span class="number">0</span>,r4=<span class="number">0</span>,r3=<span class="number">0</span>,r2=<span class="number">0</span>,r1=<span class="number">0</span>;</div><div class="line">    <span class="comment">//相关的文件路径，依次为：null，原始数据文件，压缩后数据文件</span></div><div class="line">    <span class="keyword">char</span> outDir[<span class="number">640</span>], oriFilePath[<span class="number">640</span>], outputFilePath[<span class="number">640</span>];</div><div class="line">    <span class="comment">//sz配置文件</span></div><div class="line">    <span class="keyword">char</span> *cfgFile;</div><div class="line">    </div><div class="line">    <span class="comment">//读取参数，main参数传递，参数个数少于3个报错</span></div><div class="line">    <span class="keyword">if</span>(argc &lt; <span class="number">3</span>)</div><div class="line">    &#123;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Test case: testdouble_compress [config_file] [srcFilePath] [dimension sizes...]\n"</span>);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Example: testdouble_compress sz.config testdouble_8_8_128.dat 8 8 128\n"</span>);</div><div class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line">   </div><div class="line">    <span class="comment">//指定配置文件</span></div><div class="line">    cfgFile=argv[<span class="number">1</span>];</div><div class="line">    <span class="comment">//格式化写入某个字符串，其原型：</span></div><div class="line">    <span class="comment">// int sprintf( char *buffer, const char *format, [ argument] … );</span></div><div class="line">    <span class="built_in">sprintf</span>(oriFilePath, <span class="string">"%s"</span>, argv[<span class="number">2</span>]);</div><div class="line">    <span class="comment">//atoi() 函数用来将字符串转换成整数(int)，其原型为：</span></div><div class="line">    <span class="comment">// int atoi (const char * str);</span></div><div class="line">    <span class="keyword">if</span>(argc&gt;=<span class="number">4</span>)</div><div class="line">    	r1 = atoi(argv[<span class="number">3</span>]); <span class="comment">//8</span></div><div class="line">    <span class="keyword">if</span>(argc&gt;=<span class="number">5</span>)</div><div class="line">    	r2 = atoi(argv[<span class="number">4</span>]); <span class="comment">//8</span></div><div class="line">    <span class="keyword">if</span>(argc&gt;=<span class="number">6</span>)</div><div class="line">	r3 = atoi(argv[<span class="number">5</span>]); <span class="comment">//128</span></div><div class="line">    <span class="keyword">if</span>(argc&gt;=<span class="number">7</span>)</div><div class="line">    	r4 = atoi(argv[<span class="number">6</span>]);</div><div class="line">    <span class="keyword">if</span>(argc&gt;=<span class="number">8</span>)</div><div class="line">	r5 = atoi(argv[<span class="number">7</span>]);</div><div class="line"> </div><div class="line">    <span class="built_in">printf</span>(<span class="string">"cfgFile=%s\n"</span>, cfgFile); </div><div class="line">  </div><div class="line">    <span class="comment">//压缩初始化</span></div><div class="line">    <span class="keyword">int</span> status = SZ_Init(cfgFile);</div><div class="line">    <span class="comment">//确定输出文件名</span></div><div class="line">    <span class="built_in">sprintf</span>(outputFilePath, <span class="string">"%s.sz"</span>, oriFilePath);</div><div class="line">  </div><div class="line">    <span class="comment">//元素个数，out</span></div><div class="line">    <span class="keyword">int</span> nbEle;</div><div class="line">    <span class="comment">//将原多维数据文件读入内存中，同时将其一维化，实质是一维数组形式，具体的函数定义可看sz/src/rw.c文件</span></div><div class="line">    <span class="keyword">double</span> *data = readDoubleData(oriFilePath, &amp;nbEle, &amp;status);</div><div class="line">    <span class="keyword">if</span>(status!=SZ_SCES)</div><div class="line">    &#123;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Error: file %s cannot be read!\n"</span>, oriFilePath);</div><div class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line">  </div><div class="line">    <span class="comment">//压缩后文件的大小，out</span></div><div class="line">    <span class="keyword">int</span> outSize;</div><div class="line">    <span class="comment">//计时开始</span></div><div class="line">    cost_start(); </div><div class="line">    <span class="comment">//压缩开始，</span></div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *bytes = SZ_compress(SZ_DOUBLE, data, &amp;outSize, r5, r4, r3, r2, r1);</div><div class="line">  </div><div class="line">    <span class="comment">//another compression method</span></div><div class="line">    <span class="comment">/*char *bytes = (char *)malloc(nbEle*sizeof(double)); //</span></div><div class="line">    char* bytes = SZ_compress_args(SZ_DOUBLE, data, &amp;outSize, ABS, 1E-12, 0.000001, r5, r4, r3, r2, r1);*/</div><div class="line">  </div><div class="line">    <span class="comment">//计时结束</span></div><div class="line">    cost_end();</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"timecost=%f\n"</span>,totalCost);</div><div class="line">    <span class="comment">//降压缩后的字节数据存入文件</span></div><div class="line">    writeByteData(bytes, outSize, outputFilePath, &amp;status);</div><div class="line">    <span class="keyword">if</span>(status!=SZ_SCES)</div><div class="line">    &#123;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Error: file %s cannot be written!\n"</span>, outputFilePath);</div><div class="line">	<span class="built_in">free</span>(data);</div><div class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//释放资源</span></div><div class="line">    <span class="built_in">free</span>(data);</div><div class="line">    <span class="built_in">free</span>(bytes);</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"done\n"</span>);</div><div class="line">  </div><div class="line">    <span class="comment">//压缩结束</span></div><div class="line">    SZ_Finalize();</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="解压缩实例分析"><a href="#解压缩实例分析" class="headerlink" title="解压缩实例分析"></a>解压缩实例分析</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> *  @file test_decompress.c</div><div class="line"> *  @author Sheng Di</div><div class="line"> *  @date April, 2015</div><div class="line"> *  @brief This is an example of using Decompression interface.</div><div class="line"> *  (C) 2015 by Mathematics and Computer Science (MCS), Argonne National Laboratory.</div><div class="line"> *      See COPYRIGHT in top-level directory.</div><div class="line"> */</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">//sz所需要的头文件</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"sz.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"rw.h"</span></span></div><div class="line"></div><div class="line"><span class="comment">//此部分内容用于计算time cost，可忽略</span></div><div class="line"><span class="keyword">struct</span> timeval startTime;</div><div class="line"><span class="keyword">struct</span> timeval endTime;  <span class="comment">/* Start and end times */</span></div><div class="line"><span class="keyword">struct</span> timeval costStart; <span class="comment">/*only used for recording the cost*/</span></div><div class="line"><span class="keyword">double</span> totalCost = <span class="number">0</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">cost_start</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">        gettimeofday(&amp;costStart, <span class="literal">NULL</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">cost_end</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">        <span class="keyword">double</span> elapsed;</div><div class="line">        <span class="keyword">struct</span> timeval costEnd;</div><div class="line">        gettimeofday(&amp;costEnd, <span class="literal">NULL</span>);</div><div class="line">        elapsed = ((costEnd.tv_sec*<span class="number">1000000</span>+costEnd.tv_usec)-(costStart.tv_sec*<span class="number">1000000</span>+costStart.tv_usec))/<span class="number">1000000.0</span>;</div><div class="line">        totalCost += elapsed;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//此部分为主程序</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[])</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">//同上</span></div><div class="line">    <span class="keyword">int</span> r5=<span class="number">0</span>,r4=<span class="number">0</span>,r3=<span class="number">0</span>,r2=<span class="number">0</span>,r1=<span class="number">0</span>;</div><div class="line">    <span class="comment">//表示：未压缩前的数据个数（r1×r2×...)，</span></div><div class="line">    <span class="keyword">int</span> nbEle, totalNbEle;</div><div class="line">    <span class="comment">//表示：压缩数据文件路径，解压缩后的文件路径</span></div><div class="line">    <span class="keyword">char</span> zipFilePath[<span class="number">640</span>], outputFilePath[<span class="number">640</span>];</div><div class="line">    <span class="comment">//同上</span></div><div class="line">    <span class="keyword">char</span> *cfgFile;</div><div class="line">  </div><div class="line">    <span class="comment">//同上</span></div><div class="line">    <span class="keyword">if</span>(argc &lt; <span class="number">2</span>)</div><div class="line">    &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Test case: testdouble_decompress [configFile] [srcFilePath] [dimension sizes...]\n"</span>);</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Example: testdouble_decompress sz.config testdouble_8_8_128.dat.sz 8 8 128\n"</span>);</div><div class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">	&#125;</div><div class="line">    <span class="comment">//同上</span></div><div class="line">    cfgFile = argv[<span class="number">1</span>];</div><div class="line">    <span class="built_in">sprintf</span>(zipFilePath, <span class="string">"%s"</span>, argv[<span class="number">2</span>]);</div><div class="line">    <span class="keyword">if</span>(argc&gt;=<span class="number">4</span>)</div><div class="line">        r1 = atoi(argv[<span class="number">3</span>]); <span class="comment">//8  </span></div><div class="line">    <span class="keyword">if</span>(argc&gt;=<span class="number">5</span>)</div><div class="line">        r2 = atoi(argv[<span class="number">4</span>]); <span class="comment">//8</span></div><div class="line">    <span class="keyword">if</span>(argc&gt;=<span class="number">6</span>)</div><div class="line">        r3 = atoi(argv[<span class="number">5</span>]); <span class="comment">//128  </span></div><div class="line">    <span class="keyword">if</span>(argc&gt;=<span class="number">7</span>)</div><div class="line">        r4 = atoi(argv[<span class="number">6</span>]);</div><div class="line">    <span class="keyword">if</span>(argc&gt;=<span class="number">8</span>)</div><div class="line">        r5 = atoi(argv[<span class="number">7</span>]);</div><div class="line">    </div><div class="line">    <span class="comment">//确定未压缩前的元素个数</span></div><div class="line">    <span class="keyword">if</span>(r2==<span class="number">0</span>)</div><div class="line">        nbEle = r1;</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(r3==<span class="number">0</span>)</div><div class="line">        nbEle = r1*r2;</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(r4==<span class="number">0</span>)</div><div class="line">        nbEle = r1*r2*r3;</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(r5==<span class="number">0</span>)</div><div class="line">        nbEle = r1*r2*r3*r4;</div><div class="line">    <span class="keyword">else</span></div><div class="line">        nbEle = r1*r2*r3*r4*r5;</div><div class="line">  </div><div class="line">    <span class="comment">//同上</span></div><div class="line">    <span class="built_in">sprintf</span>(outputFilePath, <span class="string">"%s.out"</span>, zipFilePath);</div><div class="line">    <span class="comment">//表示：压缩后的数据大小（字节计），程序执行状态，out</span></div><div class="line">    <span class="keyword">int</span> byteLength, status;</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *bytes = readByteData(zipFilePath, &amp;byteLength, &amp;status);</div><div class="line">    <span class="keyword">if</span>(status!=SZ_SCES)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"Error: %s cannot be READ!\n"</span>, zipFilePath);</div><div class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">//同上</span></div><div class="line">    cost_start();</div><div class="line">    <span class="comment">//解压缩，全部为in</span></div><div class="line">    <span class="keyword">double</span> *data = SZ_decompress(SZ_DOUBLE, bytes, byteLength, r5, r4, r3, r2, r1);</div><div class="line">    <span class="comment">//同上</span></div><div class="line">    cost_end();    </div><div class="line">    <span class="built_in">printf</span>(<span class="string">"timecost=%f\n"</span>,totalCost);</div><div class="line">    </div><div class="line">    <span class="built_in">free</span>(bytes); </div><div class="line">    <span class="comment">//int i=0;</span></div><div class="line">    <span class="comment">//for(;i&lt;8192;i++)</span></div><div class="line">    <span class="comment">//	printf("i=%d, data=%f\n",i,data[i]);</span></div><div class="line">    </div><div class="line">    <span class="comment">//将解压后的数据（一维数据）写入文件</span></div><div class="line">    writeDoubleData_inBytes(data, nbEle, outputFilePath, &amp;status);</div><div class="line">    <span class="keyword">if</span>(status!=SZ_SCES)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"Error: %s cannot be written!\n"</span>, outputFilePath);</div><div class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    </div><div class="line">    <span class="built_in">printf</span>(<span class="string">"done\n"</span>);</div><div class="line">    </div><div class="line">    <span class="comment">//SZ_Finalize();</span></div><div class="line">    </div><div class="line">    <span class="comment">//以下用于与原数据对比，判断两者的差异程度</span></div><div class="line">    <span class="keyword">char</span> oriFilePath[<span class="number">640</span>];</div><div class="line">    <span class="built_in">strncpy</span>(oriFilePath, zipFilePath, (<span class="keyword">unsigned</span>)<span class="built_in">strlen</span>(zipFilePath)<span class="number">-3</span>);</div><div class="line">    oriFilePath[<span class="built_in">strlen</span>(zipFilePath)<span class="number">-3</span>] = <span class="string">'\0'</span>;</div><div class="line">    <span class="keyword">double</span> *ori_data = readDoubleData(oriFilePath, &amp;totalNbEle, &amp;status);</div><div class="line">    <span class="keyword">if</span>(status!=SZ_SCES)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"Error: %s cannot be read!\n"</span>, oriFilePath);</div><div class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> i;</div><div class="line">    <span class="keyword">double</span> Max, Min, diffMax, err, maxpw_relerr = <span class="number">0</span>, relerr;</div><div class="line">    Max = ori_data[<span class="number">0</span>];</div><div class="line">    Min = ori_data[<span class="number">0</span>];</div><div class="line">    diffMax = <span class="built_in">fabs</span>(data[<span class="number">0</span>] - ori_data[<span class="number">0</span>]);</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; nbEle; i++)</div><div class="line">    &#123;</div><div class="line">    	<span class="keyword">if</span> (Max &lt; ori_data[i]) Max = ori_data[i];</div><div class="line">    	<span class="keyword">if</span> (Min &gt; ori_data[i]) Min = ori_data[i];</div><div class="line">	err = <span class="built_in">fabs</span>(data[i] - ori_data[i]);</div><div class="line">    	<span class="keyword">if</span> (diffMax &lt; err)</div><div class="line">    		diffMax = err;</div><div class="line">        <span class="keyword">if</span>(ori_data[i]!=<span class="number">0</span>)</div><div class="line">        &#123;</div><div class="line">                relerr = err/<span class="built_in">fabs</span>(ori_data[i]);</div><div class="line">		<span class="comment">/*if(relerr&gt;0.00001)</span></div><div class="line">		&#123;</div><div class="line">			printf("error:i=%d, ori_data=%f, dec_data=%f\n",i, ori_data[i], data[i]);</div><div class="line">			exit(0);</div><div class="line">		&#125;*/</div><div class="line">                <span class="keyword">if</span>(maxpw_relerr&lt;relerr)</div><div class="line">                        maxpw_relerr = relerr;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">	<span class="comment">/*if(fabs(data[i] - ori_data[i]) &gt; 1E-1)</span></div><div class="line">	&#123;</div><div class="line">		printf("error: i=%d, %.20G, %.20G\n",i,ori_data[i], data[i]);</div><div class="line">		exit(0);</div><div class="line">	&#125;*/</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="built_in">printf</span> (<span class="string">"Max absolute error = %.20G\n"</span>, diffMax);</div><div class="line">    <span class="built_in">printf</span> (<span class="string">"Max relative error = %.20G\n"</span>, diffMax/(Max-Min));</div><div class="line">    <span class="built_in">printf</span> (<span class="string">"Max pw_relative err = %.20G\n"</span>, maxpw_relerr);</div><div class="line"></div><div class="line">    <span class="built_in">free</span>(ori_data);</div><div class="line">    <span class="built_in">free</span>(data);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="Fortran-接口实例"><a href="#Fortran-接口实例" class="headerlink" title="Fortran 接口实例"></a>Fortran 接口实例</h1><h2 id="压缩实例"><a href="#压缩实例" class="headerlink" title="压缩实例"></a>压缩实例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">program p</div><div class="line">        ! 使用sz模块</div><div class="line">        use sz</div><div class="line">        use rw</div><div class="line">        </div><div class="line">        implicit none</div><div class="line">        </div><div class="line">        ! arg：配置文件参数</div><div class="line">        character(len=32) :: arg</div><div class="line">        </div><div class="line">        ! allocatable：动态分配数组</div><div class="line">        real(kind=8), dimension(:,:,:), allocatable :: grid</div><div class="line">        integer(kind=4) :: gridsize1,gridsize2,gridsize3</div><div class="line">        real(kind=8) :: res=0</div><div class="line">        integer :: i,j,k</div><div class="line">        integer(kind=4) :: ierr, outSize </div><div class="line">        </div><div class="line">        ! the size of the compressed stream</div><div class="line">        INTEGER(kind=1), DIMENSION(:), allocatable :: Bytes</div><div class="line">        </div><div class="line">        gridsize1 = 10 </div><div class="line">        gridsize2 = 10 </div><div class="line">        gridsize3 = 10 </div><div class="line">        </div><div class="line">        write (6,*) &apos;start....&apos;</div><div class="line">        allocate(grid(gridsize1,gridsize2,gridsize3))</div><div class="line">        DO i=1,gridsize1</div><div class="line">                DO j=1,gridsize2</div><div class="line">                        DO k=1,gridsize3</div><div class="line">                                grid(i,j,k)=i+j+k</div><div class="line">                        END DO</div><div class="line">                END DO</div><div class="line">        END DO</div><div class="line">     </div><div class="line">        call getarg(1, arg)</div><div class="line">        call SZ_Init(arg,ierr)</div><div class="line">       </div><div class="line">        call SZ_Compress(grid, Bytes, outSize)</div><div class="line">        call writeData(Bytes, outSize, &apos;test_f.sz&apos;) </div><div class="line">         </div><div class="line">        ! Free memory</div><div class="line">        deallocate(grid)</div><div class="line">        deallocate(Bytes)</div><div class="line">        call SZ_Finalize()</div><div class="line">        write (6,*) &apos;done.&apos;</div><div class="line">end program p</div></pre></td></tr></table></figure>
+<h2 id="解压缩实例"><a href="#解压缩实例" class="headerlink" title="解压缩实例"></a>解压缩实例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">program p</div><div class="line">        !同上</div><div class="line">        use sz</div><div class="line">        use rw</div><div class="line">        </div><div class="line">        implicit none</div><div class="line">        ! 配置文件</div><div class="line">        character(len=32) :: arg</div><div class="line">        ! 压缩后的数据流</div><div class="line">        integer(kind=1), dimension(:), allocatable :: bytes</div><div class="line">        ! 网格大小</div><div class="line">        real(kind=8), dimension(:,:,:), allocatable :: grid</div><div class="line">        integer(kind=4) :: gridsize1,gridsize2,gridsize3</div><div class="line">        real(kind=8) :: res=0</div><div class="line">        integer :: i,j,k</div><div class="line">        integer(kind=4) :: ierr</div><div class="line">        </div><div class="line">        ! the size of the compressed stream</div><div class="line">        integer(kind=4) :: outSize </div><div class="line">        </div><div class="line">        gridsize1 = 10 </div><div class="line">        gridsize2 = 10 </div><div class="line">        gridsize3 = 10 </div><div class="line">        </div><div class="line">        write (6,*) &apos;start....&apos;</div><div class="line">     </div><div class="line">        call getarg(1, arg)</div><div class="line">        call SZ_Init(arg,ierr)</div><div class="line">        </div><div class="line">        ! 读入压缩数据，后两个参数都是out</div><div class="line">        call readData(&apos;test_f.sz&apos;, bytes, outSize)</div><div class="line">        </div><div class="line">        ! 解压缩数据，（in，out，in，in，in）</div><div class="line">        call SZ_Decompress(bytes, grid, gridsize1, gridsize2, gridsize3)</div><div class="line">        </div><div class="line">        ! 写入文件，从中可以看出out的grid数组是多维的</div><div class="line">        open(unit=10,file=&apos;test_f.txt&apos;)</div><div class="line">        DO i=1,gridsize3</div><div class="line">                DO j=1,gridsize2</div><div class="line">                        DO k=1,gridsize1</div><div class="line">                                write (10,*) grid(k,j,i)</div><div class="line">                        END DO</div><div class="line">                END DO</div><div class="line">        END DO</div><div class="line">        </div><div class="line">        deallocate(grid)</div><div class="line">        deallocate(bytes) </div><div class="line">        write (6,*) &apos;done.&apos;</div><div class="line">        call SZ_Finalize()</div><div class="line">end program p</div></pre></td></tr></table></figure>
+<p>参考：</p>
+<ul>
+<li>[SZ_packages]/example/…</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sz/" rel="tag"># sz</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/02/文档分类快链/" rel="next" title="文档分类快链">
+                <i class="fa fa-chevron-left"></i> 文档分类快链
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/04/Fortran不tran/" rel="prev" title="Fortran不tran">
+                Fortran不tran <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/03/03/sz实例简析/"
+     data-title="sz实例简析"
+     data-content=""
+     data-url="http://yoursite.com/2017/03/03/sz实例简析/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/03/sz实例简析/"
+           data-title="sz实例简析" data-url="http://yoursite.com/2017/03/03/sz实例简析/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar/boy.png"
+               alt="Gaox" />
+          <p class="site-author-name" itemprop="name">Gaox</p>
+          <p class="site-description motion-element" itemprop="description">这是一个小子的个人blog，嗯，没啥会的~</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhejianggaoxiao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://zhihu.com/people/zhejianggaoxiao" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/zhejiangblue" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://music.163.com/#/user/home?id=35617743" target="_blank" title="网易云">
+                  
+                    <i class="fa fa-fw fa-music"></i>
+                  
+                  网易云
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#C-接口实例"><span class="nav-number">1.</span> <span class="nav-text">C 接口实例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#压缩实例分析"><span class="nav-number">1.1.</span> <span class="nav-text">压缩实例分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解压缩实例分析"><span class="nav-number">1.2.</span> <span class="nav-text">解压缩实例分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fortran-接口实例"><span class="nav-number">2.</span> <span class="nav-text">Fortran 接口实例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#压缩实例"><span class="nav-number">2.1.</span> <span class="nav-text">压缩实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解压缩实例"><span class="nav-number">2.2.</span> <span class="nav-text">解压缩实例</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gaox</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zhejiangblue"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('footer')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js?v=5.1.0"></script>
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OhVoAvGprlcQcE874iz42HN5-gzGzoHsz", "HYUlzEMlDdpDTLpJ4Ll67Daj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

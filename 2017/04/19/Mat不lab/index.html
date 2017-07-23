@@ -1,0 +1,1171 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="matlab," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="这篇文档主要记录一些常见但是我还没有掌握的matlab用法，毕竟小白，所以还是多记为妙～">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mat不lab">
+<meta property="og:url" content="http://yoursite.com/2017/04/19/Mat不lab/index.html">
+<meta property="og:site_name" content="Who are you?">
+<meta property="og:description" content="这篇文档主要记录一些常见但是我还没有掌握的matlab用法，毕竟小白，所以还是多记为妙～">
+<meta property="og:image" content="http://img.blog.csdn.net/20151003105747269">
+<meta property="og:updated_time" content="2017-06-11T13:40:12.366Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mat不lab">
+<meta name="twitter:description" content="这篇文档主要记录一些常见但是我还没有掌握的matlab用法，毕竟小白，所以还是多记为妙～">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20151003105747269">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6384644433400301000',
+      author: 'xoaG'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/19/Mat不lab/"/>
+
+
+
+
+
+  <title> Mat不lab | Who are you? </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a7a0c4c8a6ef4131e469f6d4b9dd315c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Who are you?</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Why are you ?</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/19/Mat不lab/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Gaox">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar/boy.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Who are you?">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Who are you?" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mat不lab
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-19T04:07:27+08:00">
+                2017-04-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tutorial/" itemprop="url" rel="index">
+                    <span itemprop="name">tutorial</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/19/Mat不lab/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/19/Mat不lab/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/04/19/Mat不lab/" class="leancloud_visitors" data-flag-title="Mat不lab">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇文档主要记录一些常见但是我还没有掌握的matlab用法，毕竟小白，所以还是多记为妙～</p>
+<a id="more"></a>
+<h2 id="20170418-matlab-二进制文件读写"><a href="#20170418-matlab-二进制文件读写" class="headerlink" title="20170418 - matlab 二进制文件读写"></a>20170418 - matlab 二进制文件读写</h2><ul>
+<li><p>读入二进制文件 - fread</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">% 打开二进制文件</span></div><div class="line"><span class="comment">% 将文件数据读入变量f中：一维方式存储在f中，num是文件中的数据个数</span></div><div class="line"><span class="comment">% 关闭文件</span></div><div class="line"></div><div class="line">fip=fopen(<span class="string">'test2.out'</span>,<span class="string">'rb'</span>);</div><div class="line">[f,num]=fread(fip,<span class="number">50</span>*<span class="number">504</span>,<span class="string">'float'</span>);</div><div class="line">fclose(fip)</div></pre></td></tr></table></figure>
+</li>
+<li><p>写出二进制文件 - fwrite</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">% 打开二进制文件</span></div><div class="line"><span class="comment">% 将变量数据写入文件中：一维方式存储在文件中</span></div><div class="line"><span class="comment">% 关闭文件</span></div><div class="line"></div><div class="line">fid=fopen(<span class="string">'V1_01.dat'</span>,<span class="string">'wb'</span>);</div><div class="line"><span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:<span class="number">1</span>:<span class="number">300</span></div><div class="line">    <span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:<span class="number">1</span>:<span class="number">2500</span></div><div class="line">        fwrite(fid,a(<span class="built_in">i</span>,<span class="built_in">j</span>),<span class="string">'float'</span>);</div><div class="line">    <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line">fclose(fid);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="20170418-matlab中让人相见恨晚的命令"><a href="#20170418-matlab中让人相见恨晚的命令" class="headerlink" title="20170418 - matlab中让人相见恨晚的命令"></a>20170418 - matlab中让人相见恨晚的命令</h2><ol>
+<li><code>dbstop if error</code>：如果运行出现错误，matlab会自动停在出错的那行，并且保存所有相关变量。<ul>
+<li>不用设置断点；</li>
+<li>为避免每次在命令行中都要敲入，可以在主函数最前面加入该语句；</li>
+<li>退出需要执行<code>dbquit</code></li>
+</ul>
+</li>
+<li>未完待续</li>
+</ol>
+<h2 id="20140418-matlab-avi动画制作"><a href="#20140418-matlab-avi动画制作" class="headerlink" title="20140418 - matlab avi动画制作"></a>20140418 - matlab avi动画制作</h2><blockquote>
+<p>VideoWrite函数，配合open,writeVideo和close方法从图像(figure)中创建视频文件、静态图像或Matlab视频。VideoWrite函数可以创建AVI和Motion JPEG 2000格式的视频文件，这些文件在多平台上都能播放，也可以创建在window平台上播放的MPEG-4文件。VideoWrite函数支持大于2GB的视频文件。VideoWrite函数使用预先定义的属性来设置视频属性，例如’Uncompressed AVI’ or ‘MPEG-4’等。</p>
+</blockquote>
+<ol>
+<li><p>工具函数 - VideoWriter()</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">writerObj = VideoWriter(filename,profile);</div></pre></td></tr></table></figure>
+<ul>
+<li><p>filename：单引号引用的字符串指定视频文件名。文件名可以加扩展名，也可以不加扩展名。Matlab支持的视频文件扩展名如下：</p>
+<ul>
+<li>.avi ：avi file</li>
+<li>.mj2：Motion JPEG 2000 file</li>
+<li>.mp4 or m4v：MPEG-4 file (Win7 system only)</li>
+</ul>
+<p><strong>Tip</strong>：如果文件名不指定扩展名，VideoWrite函数将根据profile的设置来自动加上.avi，.mj2，.mp4 或者.m4v的扩展名，如果没有设置profile的值，VideoWrite函数默认保存为.avi文件。</p>
+</li>
+<li><p>profile：使用单引号引用的字符串，描述了创建视频的类型。</p>
+<ul>
+<li>‘Archival’</li>
+<li>‘Motion JPEG AVI’</li>
+<li>‘Motion JPEG 2000’</li>
+<li>‘MPEG-4’</li>
+<li>‘Uncompressed AVI’</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>函数方法</p>
+<ul>
+<li>open：Openfile for writing video data 打开视频</li>
+<li>getProfiles：List profiles and file formats supportedby VideoWriter 列出VideoWriter支持的配置和文件格式</li>
+<li>writeVideo：Write video data to file 写视频</li>
+<li>close：Closefile after writing video data 写完视频数据后关闭文件</li>
+</ul>
+</li>
+<li><p>基本步骤</p>
+<ul>
+<li><p>创建视频并打开该视频文件</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">writerObj=VideoWriter(<span class="string">'test.avi'</span>);  <span class="comment">%// 定义一个视频文件用来存动画  </span></div><div class="line">open(writerObj);                    <span class="comment">%// 打开该视频文件</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>在循环中获取图像中的帧</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">frame = getframe;              <span class="comment">%// 把图像存入视频文件中</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>将帧写入视频文件</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">writeVideo(writerObj,frame);   <span class="comment">%// 将帧写入视频</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>循环结束后关闭视频文件</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">close(writerObj);   <span class="comment">%// 关闭视频文件句柄</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>其他设置</p>
+<ul>
+<li><p>改变帧数</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">% 此语句必须在open语句之前</span></div><div class="line">writerObj.FrameRate=<span class="number">2</span>;  <span class="comment">% 默认30，即1秒30幅图</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>改变像素尺寸</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">frame = getframe;  </div><div class="line">frame.cdata = imresize(frame.cdata, [H W]); <span class="comment">%// 设置视频宽高：H为行数(高)，W为列数(宽)  </span></div><div class="line">writeVideo(writerObj,frame);</div></pre></td></tr></table></figure>
+<p>VideoWrite()函数默认根据第一帧的大小决定保存视频高和宽，并且没有给出自定义视频尺寸的方法。网上搜了很久，没有找到如何改变保存视频像素尺寸的方法。设置断点调试，发现frame=getframe;获取的帧frame为一个结构体，包含两个成员：</p>
+<p><img src="http://img.blog.csdn.net/20151003105747269" alt="frame结构"></p>
+<p>cdata为数据，colormap为调色板。cdata的尺寸378×607就是第一帧读取的图像的尺寸，VideoWrite()函数将默认以该尺寸保存所有图像帧到视频文件。</p>
+<p>有时，图像绘制过程中，如果曲线的尺寸会随时间变化：变小不会有问题，而如果曲线尺寸超过378×607就会出错。为了避免因此造成的错误，可以通过在<strong>读完每一帧后改变该帧的尺寸</strong>，来实现将视频保存成自定义的长宽，不足的部分自动用figure的底色填充。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>注意</strong>：matlab是区分大小写的，所以这里用的VideoWriter()以及writeVideo中的大小写不可随意改变。</p>
+<p>参考：</p>
+<ul>
+<li><a href="http://blog.csdn.net/iracer/article/details/48876473" target="_blank" rel="external">Matlab—将绘图保存为视频VideoWrite()函数用法与自定义视频尺寸</a></li>
+<li>help VideoWriter</li>
+</ul>
+<h2 id="2017-05-04-matlab中的Renderer"><a href="#2017-05-04-matlab中的Renderer" class="headerlink" title="2017 - 05 - 04 matlab中的Renderer"></a>2017 - 05 - 04 matlab中的Renderer</h2><p><strong>1.首先解释下什么是Renderer：</strong><br>A  renderer is the software that processes graphics data (such as vertex coordinates) into a form that MATLAB can use to draw into the figure. MATLAB supports three renderers:<br>1) Painters<br>2) Z-buffer<br>3) OpenGL<br>Renderer(扫描器)是一种图像数据转换程序，通过这个程序，可以把图像数据转化为Matlab可以用来画图的内容。可以这样理解：Renderer(渲染器，描绘器)是matlab用来画图（即将数据转化为图像）的方式。<br><strong>它三种方式：1）Painters   2)  Z-buffer  3)  OpenGL</strong></p>
+<p><strong>2.三种方式的比较</strong><br>1)painters  再画简单的图画时，比较快；<br>2)z-buffer 又称深度缓冲技术，它是现在内存中画图，然后再将最终的图像显示在显示终端。这样的话，当在一个像素点，如果被多次赋值的话，它只会显示最高层的图像。<br>3) opengl 是利用硬件进行绘图的方式。</p>
+<h2 id="2017-05-10-matlab中不同长度字符串数组"><a href="#2017-05-10-matlab中不同长度字符串数组" class="headerlink" title="2017 - 05 - 10 matlab中不同长度字符串数组"></a>2017 - 05 - 10 matlab中不同长度字符串数组</h2><p>使用cell数组，关键点：<code>{ }</code></p>
+<blockquote>
+<p>元胞数组是MATLAB的一种特殊数据类型，可以将元胞数组看做一种无所不包的通用矩阵，或者叫做广义矩阵。组成元胞数组的元素可以是任何一种数据类型的常数或者常量，每一个元素也可以具有不同的尺寸和内存占用空间，每一个元素的内容也可以完全不同，所以元胞数组的元素叫做元胞（cell）。和一般的数值矩阵一样，元胞数组的内存空间也是动态分配的。</p>
+</blockquote>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:<span class="number">1</span>:mpx</div><div class="line">    <span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:<span class="number">1</span>:mpy</div><div class="line">        <span class="keyword">for</span> k=<span class="number">1</span>:<span class="number">1</span>:mpz</div><div class="line">            fnm_out&#123;ii&#125;=char([fnm_out <span class="string">'sgt_00'</span> num2str(id) <span class="string">'_mpi0'</span> px(i) <span class="string">'0'</span> py(j) <span class="string">'0'</span> pz(k) <span class="string">'_n00001.nc'</span>]);</div><div class="line">            ii=ii+<span class="number">1</span>;</div><div class="line">        <span class="keyword">end</span></div><div class="line">    <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>参考：</p>
+<ul>
+<li><a href="http://www.cppblog.com/guijie/archive/2009/10/20/99034.aspx" target="_blank" rel="external">Matlab字符串数组</a></li>
+<li><a href="http://blog.sina.com.cn/s/blog_5ecfd9d90100i6ld.html" target="_blank" rel="external">matlab的cell数组</a></li>
+</ul>
+<h2 id="2017-06-11-matlab中的字体设置"><a href="#2017-06-11-matlab中的字体设置" class="headerlink" title="2017 - 06 - 11 matlab中的字体设置"></a>2017 - 06 - 11 matlab中的字体设置</h2><ol>
+<li><p>通用格式</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">title([<span class="string">'\fontsize&#123;6&#125;\fontname&#123;宋体&#125;中文\fontsize&#123;7.5&#125;\fontname&#123;the new time&#125;english'</span>]);</div></pre></td></tr></table></figure>
+</li>
+<li><p>采用句柄设置</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">set(gca,<span class="string">'FontSize'</span>,<span class="number">20</span>);</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/matlab/" rel="tag"># matlab</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/30/FD3D运行大全/" rel="next" title="FD3D运行大全">
+                <i class="fa fa-chevron-left"></i> FD3D运行大全
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/24/30分钟shell入门/" rel="prev" title="30分钟shell入门">
+                30分钟shell入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/04/19/Mat不lab/"
+     data-title="Mat不lab"
+     data-content=""
+     data-url="http://yoursite.com/2017/04/19/Mat不lab/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/19/Mat不lab/"
+           data-title="Mat不lab" data-url="http://yoursite.com/2017/04/19/Mat不lab/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar/boy.png"
+               alt="Gaox" />
+          <p class="site-author-name" itemprop="name">Gaox</p>
+          <p class="site-description motion-element" itemprop="description">这是一个小子的个人blog，嗯，没啥会的~</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhejianggaoxiao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://zhihu.com/people/zhejianggaoxiao" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/zhejiangblue" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://music.163.com/#/user/home?id=35617743" target="_blank" title="网易云">
+                  
+                    <i class="fa fa-fw fa-music"></i>
+                  
+                  网易云
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#20170418-matlab-二进制文件读写"><span class="nav-number">1.</span> <span class="nav-text">20170418 - matlab 二进制文件读写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#20170418-matlab中让人相见恨晚的命令"><span class="nav-number">2.</span> <span class="nav-text">20170418 - matlab中让人相见恨晚的命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#20140418-matlab-avi动画制作"><span class="nav-number">3.</span> <span class="nav-text">20140418 - matlab avi动画制作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2017-05-04-matlab中的Renderer"><span class="nav-number">4.</span> <span class="nav-text">2017 - 05 - 04 matlab中的Renderer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2017-05-10-matlab中不同长度字符串数组"><span class="nav-number">5.</span> <span class="nav-text">2017 - 05 - 10 matlab中不同长度字符串数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2017-06-11-matlab中的字体设置"><span class="nav-number">6.</span> <span class="nav-text">2017 - 06 - 11 matlab中的字体设置</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gaox</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zhejiangblue"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('footer')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js?v=5.1.0"></script>
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OhVoAvGprlcQcE874iz42HN5-gzGzoHsz", "HYUlzEMlDdpDTLpJ4Ll67Daj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

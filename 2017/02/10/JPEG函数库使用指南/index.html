@@ -1,0 +1,1158 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JPEG," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="这篇文档可以看成是Example那篇文档的一个辅助文档，若是要自己开发并将JPEG的解压缩功能用于自己的程序中，建议结合这两篇文档。更多细节参阅原文档。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JPEG函数库使用指南">
+<meta property="og:url" content="http://yoursite.com/2017/02/10/JPEG函数库使用指南/index.html">
+<meta property="og:site_name" content="Who are you?">
+<meta property="og:description" content="这篇文档可以看成是Example那篇文档的一个辅助文档，若是要自己开发并将JPEG的解压缩功能用于自己的程序中，建议结合这两篇文档。更多细节参阅原文档。">
+<meta property="og:updated_time" content="2017-03-02T07:07:45.116Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JPEG函数库使用指南">
+<meta name="twitter:description" content="这篇文档可以看成是Example那篇文档的一个辅助文档，若是要自己开发并将JPEG的解压缩功能用于自己的程序中，建议结合这两篇文档。更多细节参阅原文档。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6384644433400301000',
+      author: 'xoaG'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/02/10/JPEG函数库使用指南/"/>
+
+
+
+
+
+  <title> JPEG函数库使用指南 | Who are you? </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a7a0c4c8a6ef4131e469f6d4b9dd315c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Who are you?</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Why are you ?</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/10/JPEG函数库使用指南/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Gaox">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar/boy.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Who are you?">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Who are you?" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JPEG函数库使用指南
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-10T21:48:39+08:00">
+                2017-02-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/data-compress/" itemprop="url" rel="index">
+                    <span itemprop="name">data compress</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/10/JPEG函数库使用指南/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/10/JPEG函数库使用指南/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/10/JPEG函数库使用指南/" class="leancloud_visitors" data-flag-title="JPEG函数库使用指南">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇文档可以看成是<a href="https://zhejianggaoxiao.github.io/2017/02/10/Example-of-IJG-Code/" target="_blank" rel="external">Example那篇文档</a>的一个辅助文档，若是要自己开发并将JPEG的解压缩功能用于自己的程序中，建议结合这两篇文档。更多细节参阅原文档。</p>
+<a id="more"></a>
+<h1 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h1><p>IJG JPEG库函数提供了C代码编写的程序用于读写JPEG压缩的图像文件，外围应用程序可以一次发送或是接收a scanline的未压缩的图像数据。另外，该函数库还可以解决颜色转换以及预处理/后置处理等问题。</p>
+<p>IJG JPEG只能解决interchange JPEG数据流，特别是广泛使用的JFIF文件格式。它也可以被内嵌在更复杂的代码中用于处理interchange or abbreviated的JPEG数据流中。</p>
+<h1 id="库函数基本用法"><a href="#库函数基本用法" class="headerlink" title="库函数基本用法"></a>库函数基本用法</h1><h2 id="数据格式"><a href="#数据格式" class="headerlink" title="数据格式"></a>数据格式</h2><p>标准输入图像格式是像素点的矩形阵列，其中每一个像素有着相同数目的“组成”或说“样点”（颜色通道）。你必须指定每个像素点有多少组成以及这些组成成分的颜色空间解释。大部分的应用将会使用RGB数据（每一个像素点有3种颜色成分）或是灰度数据（每个像素点只有一个颜色成分）。必须强调的是RGB数据每个像素点有三个样点值，而灰度数据每个像素点为一个样点值。</p>
+<p>在这没有提供颜色表的输入。JPEG文件通常都是全彩或是全灰的（或者有时也会是其他的颜色空间，例如CMYK）。我们可以通过扩展一个colormapped的图像到全颜色空间格式来实现将其颜色填满。然而由于抖动干扰的存在，JPEG通常对来自colormapped的源数据处理不是很好。</p>
+<p>像素点通过scanlines存储，在每一个scanline中，从左到右排列。对于在每一个像素点中的组成成分，它们中行中是相邻排列的，例如对于24位的RGB颜色，其每一行排列为：R,G,B,R,G,B…每一个scanline是一个数据类型为JSAMPLE的数组，JSAMPLE类型通常表示无符号字符型，除非你改变了头文件jmorecfg.h。（我们也可以改变RGB像素点的排布方式，也就是R，G，B的排列方式，同样需要在jmorecfg.h中修改）。</p>
+<p>通过一列指向scanlines开头的指针，一个2维像素点阵列就可以形成，因此这些scanlines在物理内存中是不需要相邻的。即使你每次只处理一条scanline，你也必须创建一个单个元素的指针数组来符合这个结构。指向JSAMPLE行的指针类型是JSAMPROW，而指向指针数组的指针类型位JSAMPARRAY。</p>
+<p>在每一次调用过程中，库函数接收或是提供一个或是多个完整的scanlines。一次处理一行scanline的部分是不可能的。并且scanlines都是从上往下处理。如果一整个图像数据都在内存中，那么我们可以一次处理所有图像数据，但是最简单的还是一次处理一行scanline。</p>
+<p>为了使结果最好，源数据数值的精度通过BITS_IN_JSAMPLE（通常是8位）来指定。例如，如果我们选择的数据是每通道6位的，那么我们应该在将数据传递给压缩器之前，将一个字节中每一个数值向左对齐。如果我们需要压缩的数据超过每通道8位 ，我们需要加入编译选项 BITS_IN_JSAMPLE=9 to 12（详情见Library compile-timoptions）</p>
+<p>由解压缩器返回得到的数据格式与前面几乎相同，除了它对colormapped的数据输出也是支持的。（再次声明，一个JPEG文件是不能colormapped，但是我们可以让解压缩器通过颜色量化表产生colormapped output。）如果我们要求的是colormapped output，那么返回的数据阵列包含的是每个像素单个JSAMPLE，这个JSAMPLE的值是一个颜色表的索引。这个颜色表以一个2维的JSAMPARRAY呈现，其中每一行包含一个颜色组成的值，也就是说，colormap[i][j]表示的像素值（索引）j的第i个颜色成分的数值。注意，由于颜色表的索引值存储在JSAMPLEs中，颜色的最大数值是由JSAMPLE的大小限制的（例如，对于8位的JPEG库而言，最多 有256种颜色）。</p>
+<h2 id="JPEG压缩的具体细节"><a href="#JPEG压缩的具体细节" class="headerlink" title="JPEG压缩的具体细节"></a>JPEG压缩的具体细节</h2><h3 id="分配和初始化JPEG压缩对象"><a href="#分配和初始化JPEG压缩对象" class="headerlink" title="分配和初始化JPEG压缩对象"></a>分配和初始化JPEG压缩对象</h3><p>一个JPEG压缩对象就是一个<code>struct jpeg_compress_struct</code>。如果单个子例程序将执行整个JPEG压缩的话，那么这个结构体在调用的子例函数中可以作为一个局部变量。否则它可以使静态的会使从malloc()中分配。</p>
+<p>我们同时还需要定义一个错误处理的结构体对象，即<code>struct jpeg_error_mgr</code>。如果我们想用自己的错误处理方式，我们一般需要将上述结构体嵌入到一个 更大的结构体当中（详情可见“Error handling”）。默认的错误处理方式将会打印出错误/警告信息，并且在发送严重错误后调用exit()退出。</p>
+<p>我们必须初始化错误处理结构体，之后调用<code>jpeg_create_compress</code>来初始化JPEG对象的其他部分。</p>
+<p>如果我们使用默认处理方式，那么这部分的代码应为</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> jpeg_compress_struct cinfo;</div><div class="line"><span class="keyword">struct</span> jpeg_error_mgr jerr;</div><div class="line">...</div><div class="line">cinfo.err=jpeg_std_error(&amp;jerr);</div><div class="line">jpeg_create_compress(&amp;cinfo);</div></pre></td></tr></table></figure>
+<p><strong>Tips</strong>：调用<code>jpeg_create_compress</code>将会分配一小块内存，因此如果内存溢出的话它将会分配失败。在那种情况下，通过错误处理句柄，程序就会退出，这就是为什么错误处理方式必须首先初始化。</p>
+<h3 id="指定压缩数据的目的地（例如某个文件）"><a href="#指定压缩数据的目的地（例如某个文件）" class="headerlink" title="指定压缩数据的目的地（例如某个文件）"></a>指定压缩数据的目的地（例如某个文件）</h3><p>JPEG库函数将会把压缩数据传送到一个数据目的地模块中，这个模块知道如何将数据写入到标准输入输出流中。如果我们想进行其他操作的话，我们可以使用我们自己的目的地模块。但是在<code>jpeg_start_compress</code>和<code>jpeg_finish_compress</code>之间我们不能改变数据目的地。</p>
+<p>如果我们使用标准的目的地模块，我们首先必须打开目标输入输出流，对于这一步典型的代码应为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">FILE * outfile;</div><div class="line">...</div><div class="line"><span class="keyword">if</span>((outfile=fopen(filename,<span class="string">"wb"</span>))==<span class="literal">NULL</span>)&#123;</div><div class="line">  <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">"can't open %s\n"</span>,filename);</div><div class="line">  <span class="built_in">exit</span>(<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">jpeg_stdio_dest(&amp;cinfo,outfile);</div></pre></td></tr></table></figure>
+<p>其中最后一行调用了标准目的地模块。</p>
+<h3 id="设定压缩参数，包括图像大小以及颜色空间等"><a href="#设定压缩参数，包括图像大小以及颜色空间等" class="headerlink" title="设定压缩参数，包括图像大小以及颜色空间等"></a>设定压缩参数，包括图像大小以及颜色空间等</h3><p>在开始压缩数据之前必须要为JPEG对象（cinfo structure）指定几个参数和缺省参数。</p>
+<p>设定缺省参数之前需要指定的几个参数是：</p>
+<ul>
+<li>图像宽度：cinfo.image_width，</li>
+<li>图像高度：cinfo.image_height，JPEG支持的宽度和高度在两个方向上可为1~64K，</li>
+<li>图像的颜色通道数：cinfo.input_components（比如RGB图像为3，灰度图为1），</li>
+<li>图像颜色空间：cinfo.in_color_space（比如真彩色 JCS_RGB，灰度图JCS_GRAYSCALE）。</li>
+</ul>
+<p>JPEG有大量的压缩参数可供选择，但是大部分应用并不需要知道这所有的参数，因此我们可以通过调动<code>jpeg_set_defaults()</code>来将参数全部设置为合理值，然后，如果我们想改变某个特定参数，我们就可以在其后进行改变。</p>
+<p><strong>注意</strong>：在调用<code>jpeg_set_defaults()</code>之前我们必须设置cinfo.in_color_space，因为默认设置依赖于源图像的颜色空间。但是其他三个参数直到调用<code>jpeg_start_compress</code>之前都不是必须的。另外，多次调用<code>jpeg_set_defaults()</code>是允许的。</p>
+<p>对于24位的RGB源图像，典型的代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cinfo.image_width = Width;      <span class="comment">/* image width and height, in pixels */</span></div><div class="line">cinfo.image_height = Height;</div><div class="line">cinfo.input_components = <span class="number">3</span>;     <span class="comment">/* # of color components per pixel */</span></div><div class="line">cinfo.in_color_space = JCS_RGB; <span class="comment">/* colorspace of input image */</span></div><div class="line">jpeg_set_defaults(&amp;cinfo);</div><div class="line"><span class="comment">/* Make optional parameter settings here */</span></div></pre></td></tr></table></figure>
+<h3 id="开始压缩：jpeg-start-compress-…"><a href="#开始压缩：jpeg-start-compress-…" class="headerlink" title="开始压缩：jpeg_start_compress(…)"></a>开始压缩：jpeg_start_compress(…)</h3><p>调用<code>jpeg_start_compress()</code>将会开始压缩循环，这将会初始化一个内部状态，分配一个工作内存，并且发送一些JPEG数据流头部的字节内容。</p>
+<p>这一部分的典型代码为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jpeg_start_compress(&amp;cinfo, TRUE);</div></pre></td></tr></table></figure>
+<p><strong>注意：</strong>“TRUE”将会确保一个完整的可互换的数据流将被写入。另外，一旦调用了上述函数开始压缩，我们就不能改变任何JPEG的参数或是JPEG对象的某些域值，直到压缩循环结束。</p>
+<h3 id="压缩循环操作"><a href="#压缩循环操作" class="headerlink" title="压缩循环操作"></a>压缩循环操作</h3><p>我们通过调用<code>jpeg_write_scanlines()</code>可以一次写入一条或多条scanlines，在大部分应用中，一般以一次一条或几条为宜。另外，图像数据将按照从上到下的顺序写入（出于兼容性考虑）。</p>
+<p>在JPEG对象的next_scanline域中存有到目前位置已经写入的scanlines的数目，因此我们可以直接使用该变量作为循环变量。</p>
+<p>这一部分的典型代码位：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">JSAMPROW row_pointer[<span class="number">1</span>];        <span class="comment">/* pointer to a single row */</span></div><div class="line"><span class="keyword">int</span> row_stride;                 <span class="comment">/* physical row width in buffer */</span></div><div class="line">row_stride = image_width * <span class="number">3</span>;   <span class="comment">/* JSAMPLEs per row in image_buffer */</span></div><div class="line"><span class="keyword">while</span> (cinfo.next_scanline &lt; cinfo.image_height) &#123;</div><div class="line">  row_pointer[<span class="number">0</span>] = &amp; image_buffer[cinfo.next_scanline * row_stride];</div><div class="line">  jpeg_write_scanlines(&amp;cinfo, row_pointer, <span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>jpeg_write_scanlines()</code>的返回值是实际写入的scanlines的数目，它等同于传递进去的scanlines的数目，所以通常我们可以忽略这个返回值，但在两种情况下它们有所不同（详见libjpeg.txt）。</p>
+<h3 id="结束压缩：jpeg-finish-compress-…"><a href="#结束压缩：jpeg-finish-compress-…" class="headerlink" title="结束压缩：jpeg_finish_compress(…)"></a>结束压缩：jpeg_finish_compress(…)</h3><p>在所有的图像数据都被写入以后，调用<code>jpeg_finish_compress</code>来完成压缩循环。同时它也会释放与JPEG对象相联系的工作内存。</p>
+<p>这一部分的典型代码为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jpeg_finish_compress(&amp;cinfo);</div></pre></td></tr></table></figure>
+<p><strong>注意：</strong></p>
+<ul>
+<li>如果我们的模式是multi-pass模式，例如HUffman 编码优化，上述函数将会使用第一次传递的缓存数据执行额外的传递操作。在这种情况下，调用这个函数将会花费较长的时间完成操作。但是在默认参数设置下，这种情况将不会发生。</li>
+<li>在写入全部数目的scanlines之前调用上述函数将会发生错误，如果希望退出压缩，我们应该调用<code>jpeg_abort()</code>。</li>
+<li>在完成压缩之后，我们可以将JPEG对象释放掉，也可以将它用于压缩其他图像，在那种情况下，我们只需重复步骤2,3,4。如果我们不改变目的地管理器，那么新的数据流将会被写入相同的目标文件中；如果我们不改变任何JPEG参数，新的数据就将会按照之前的参数设置写入。如果我们改变了颜色空间，我们需要调用<code>jpeg_set_defaults()</code>来适应新的颜色空间，进而我们需要重复第三部的所有操作。</li>
+</ul>
+<h3 id="释放JPEG压缩对象"><a href="#释放JPEG压缩对象" class="headerlink" title="释放JPEG压缩对象"></a>释放JPEG压缩对象</h3><p>我们可以通过调用<code>jpeg_destroy_compress()</code>来释放JPEG压缩对象，它将会释放所有的附属内存。或者我们也可通过调用<code>jpeg_destroy()</code>来释放，这个函数既可以使用与JPEG压缩对象也可以是解压缩对象。</p>
+<p>这一部分的典型代码为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jpeg_destroy_compress(&amp;cinfo);</div></pre></td></tr></table></figure>
+<h3 id="中止退出"><a href="#中止退出" class="headerlink" title="中止退出"></a>中止退出</h3><p>如果我们想在压缩结束之前就中止循环，我们可以通过以下任意一种方式来清理内存：</p>
+<ul>
+<li>如果我们不再需要JPEG压缩对象，我们就像步骤7一样，直接释放内存。这在调用了<code>jpeg_start_compress()</code>之后都是合理的；</li>
+<li>如我我们打算重复利用JPEG对象，那么就调用<code>jpeg_abort_compress()</code>或者是<code>jpeg_abort()</code>。这将会使对象回到一个空闲状态，并且释放掉了所有的工作内存。在对象成功创建之后，任何时候调用<code>jpeg_abort()</code>都是允许的。</li>
+</ul>
+<h2 id="JPEG解压缩具体细节"><a href="#JPEG解压缩具体细节" class="headerlink" title="JPEG解压缩具体细节"></a>JPEG解压缩具体细节</h2><h3 id="分配和初始化JPEG解压缩对象"><a href="#分配和初始化JPEG解压缩对象" class="headerlink" title="分配和初始化JPEG解压缩对象"></a>分配和初始化JPEG解压缩对象</h3><p>同初始化JPEG压缩对象类似，除了使用的结构体不同，错误处理方式也与前面的相同。另外，在IJG代码中，我们一般都会使用<code>cinfo</code>作为压缩和解压缩对象。</p>
+<p>这一部分的典型代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> jpeg_decompress_struct cinfo;</div><div class="line"><span class="keyword">struct</span> jpeg_error_mgr jerr;</div><div class="line">...</div><div class="line">cinfo.err = jpeg_std_error(&amp;jerr);</div><div class="line">jpeg_create_decompress(&amp;cinfo);</div></pre></td></tr></table></figure>
+<h3 id="指定压缩数据的来源（例如一个文件）"><a href="#指定压缩数据的来源（例如一个文件）" class="headerlink" title="指定压缩数据的来源（例如一个文件）"></a>指定压缩数据的来源（例如一个文件）</h3><p>正如前面所说的，JPEG库将会从数据源模块中读取压缩数据。函数库中已经包含了一个能从标准输入输出流中读取数据的数据源模块。如果我们使用标准数据源模块，我们必须先打开数据源的标准输入输出数据流。</p>
+<p>这一步的典型代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">FILE * infile;</div><div class="line">...</div><div class="line"><span class="keyword">if</span> ((infile = fopen(filename, <span class="string">"rb"</span>)) == <span class="literal">NULL</span>) &#123;</div><div class="line"><span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"can't open %s\n"</span>, filename);</div><div class="line"><span class="built_in">exit</span>(<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">jpeg_stdio_src(&amp;cinfo, infile);		<span class="comment">//invoke the standard source modue</span></div></pre></td></tr></table></figure>
+<p><strong>Tip</strong>：在调用<code>jpeg_read_header()</code>之后和<code>jpeg_finish_decompress()</code>之前，我们一般不能改变数据流的来源。因此，如果我们从单一数据源文件中读取一系列JPEG文件，我们需要重复<code>jpeg_read_header()</code>和<code>jpeg_finish_decompress()</code>之间的代码，但是不需要重新初始化JPEG对象以及数据源模块（也就是不需要改变输入数据的文件）</p>
+<h3 id="调用jpeg-read-header-获得图片的信息"><a href="#调用jpeg-read-header-获得图片的信息" class="headerlink" title="调用jpeg_read_header()获得图片的信息"></a>调用<code>jpeg_read_header()</code>获得图片的信息</h3><p>该函数将会从数据数据中读取图像中的头文件部分，直到压缩数据的开始位置。返回得到的图像大小以及其他信息将会存储在JPEG对象中，也就是<code>cinfo</code>中</p>
+<p>这一部分的典型代码为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jpeg_raed_header(&amp;cinfo, TRUE);</div></pre></td></tr></table></figure>
+<p><strong>Tip</strong>：如果我们只想获得图片的一些信息，那么我们可以在这一步就中止，我们需要调用<code>jpeg_destroy()</code>或是<code>jpeg_abort()</code>来完成这一操作</p>
+<h3 id="设置解压缩参数"><a href="#设置解压缩参数" class="headerlink" title="设置解压缩参数"></a>设置解压缩参数</h3><p>在调用上上述步骤的函数后，<code>jpeg_raed_header()</code>已经设置了合适的默认解压缩参数（基于其获取到的图片信息）。如果我们想更改一些默认参数，我们可以在这一步设置。具体的设置可以参见<code>Decompression parameter selection</code></p>
+<h3 id="开始解压缩：jpeg-start-decompress"><a href="#开始解压缩：jpeg-start-decompress" class="headerlink" title="开始解压缩：jpeg_start_decompress()"></a>开始解压缩：jpeg_start_decompress()</h3><p>调用以该函数后，它将会初始化程序内部状态，分配工作内存以及准备返回值。</p>
+<p>这一步的典型代码为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jpeg_start_decompress(&amp;cinfo);</div></pre></td></tr></table></figure>
+<p>另外，在这次调用之后，关于图像的所有信息就保存到了JPEG对象中，这些信息包括有：</p>
+<ul>
+<li>output_width：图像的宽度</li>
+<li>output_height：图像的高度</li>
+<li>out_color_components：# of color components in out_color_space</li>
+<li>output_components：每一个像素的颜色成分</li>
+<li>colormap： the selected colormap, if any</li>
+<li>actual_number_of_colors： number of entries in colormap</li>
+</ul>
+<p><strong>Tip</strong>：在调用该函数前，图像的各种信息是无法获取的，不过我们也可以在设置完解压缩参数后，调用<code>jpeg_calc_output_dimensions()</code>来使这些参数可用。另外，我们在这一步也需要分配缓存空间，具体可以参见<a href="https://zhejianggaoxiao.github.io/2017/02/10/Example-of-IJG-Code/#more" target="_blank" rel="external">Example-of-IJG-Code</a>中的解压缩部分</p>
+<h3 id="解压缩循环操作"><a href="#解压缩循环操作" class="headerlink" title="解压缩循环操作"></a>解压缩循环操作</h3><p>通过多次调用<code>jpeg_read_scanlines()</code>将解压缩数据读入内存中，返回值是实际读入的scanline的数目。另外，对于灰度JPEG图和彩色JPEG图，其返回的数据格式是不一样的。</p>
+<p>这一部分的典型代码为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(cinfo.output_scanline&lt;cinfo.output_height)&#123;</div><div class="line">    (<span class="keyword">void</span>)jpeg_read_scanlines(&amp;cinfo,buffer,<span class="number">1</span>);</div><div class="line">    <span class="comment">/* 假定put_scanline_someplace需要一个指针和样点数</span></div><div class="line">     * do something else */</div><div class="line">    put_scanline_someplace(buffer[<span class="number">0</span>],row_stride);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="结束解压缩：jpeg-finish-decompress"><a href="#结束解压缩：jpeg-finish-decompress" class="headerlink" title="结束解压缩：jpeg_finish_decompress()"></a>结束解压缩：jpeg_finish_decompress()</h3><p>调用上述函数将会完成解压缩循环，同时释放工作内存。</p>
+<p>这一部分的典型代码为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jpeg_finish_decompress(&amp;cinfo);</div></pre></td></tr></table></figure>
+<p>其余注意事项同结束压缩。</p>
+<h3 id="释放JPEG解压缩对象"><a href="#释放JPEG解压缩对象" class="headerlink" title="释放JPEG解压缩对象"></a>释放JPEG解压缩对象</h3><p>这一部分的典型代码为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jpeg_destroy_decompress(&amp;cinfo);</div></pre></td></tr></table></figure>
+<h3 id="中止退出-1"><a href="#中止退出-1" class="headerlink" title="中止退出"></a>中止退出</h3><p>同压缩部分</p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>关于ADVANCED FEATURES这一部分建议参阅<a href="https://www4.cs.fau.de/Services/Doc/graphics/doc/jpeg/libjpeg.html" target="_blank" rel="external">原文档</a></p>
+<p>参考：</p>
+<ul>
+<li>示例：<a href="https://dev.w3.org/Amaya/libjpeg/example.c" target="_blank" rel="external">example.c</a></li>
+<li>库说明：<a href="https://www4.cs.fau.de/Services/Doc/graphics/doc/jpeg/libjpeg.html" target="_blank" rel="external">libjpeg.txt</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JPEG/" rel="tag"># JPEG</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/10/Utilities-of-Jpeg/" rel="next" title="Utilities of JPEG">
+                <i class="fa fa-chevron-left"></i> Utilities of JPEG
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/11/MIC-Hello-world/" rel="prev" title="MIC-HelloWorld">
+                MIC-HelloWorld <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/02/10/JPEG函数库使用指南/"
+     data-title="JPEG函数库使用指南"
+     data-content=""
+     data-url="http://yoursite.com/2017/02/10/JPEG函数库使用指南/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/10/JPEG函数库使用指南/"
+           data-title="JPEG函数库使用指南" data-url="http://yoursite.com/2017/02/10/JPEG函数库使用指南/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar/boy.png"
+               alt="Gaox" />
+          <p class="site-author-name" itemprop="name">Gaox</p>
+          <p class="site-description motion-element" itemprop="description">这是一个小子的个人blog，嗯，没啥会的~</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhejianggaoxiao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://zhihu.com/people/zhejianggaoxiao" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/zhejiangblue" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://music.163.com/#/user/home?id=35617743" target="_blank" title="网易云">
+                  
+                    <i class="fa fa-fw fa-music"></i>
+                  
+                  网易云
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概览"><span class="nav-number">1.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#库函数基本用法"><span class="nav-number">2.</span> <span class="nav-text">库函数基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据格式"><span class="nav-number">2.1.</span> <span class="nav-text">数据格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JPEG压缩的具体细节"><span class="nav-number">2.2.</span> <span class="nav-text">JPEG压缩的具体细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分配和初始化JPEG压缩对象"><span class="nav-number">2.2.1.</span> <span class="nav-text">分配和初始化JPEG压缩对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指定压缩数据的目的地（例如某个文件）"><span class="nav-number">2.2.2.</span> <span class="nav-text">指定压缩数据的目的地（例如某个文件）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设定压缩参数，包括图像大小以及颜色空间等"><span class="nav-number">2.2.3.</span> <span class="nav-text">设定压缩参数，包括图像大小以及颜色空间等</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开始压缩：jpeg-start-compress-…"><span class="nav-number">2.2.4.</span> <span class="nav-text">开始压缩：jpeg_start_compress(…)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#压缩循环操作"><span class="nav-number">2.2.5.</span> <span class="nav-text">压缩循环操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结束压缩：jpeg-finish-compress-…"><span class="nav-number">2.2.6.</span> <span class="nav-text">结束压缩：jpeg_finish_compress(…)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#释放JPEG压缩对象"><span class="nav-number">2.2.7.</span> <span class="nav-text">释放JPEG压缩对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中止退出"><span class="nav-number">2.2.8.</span> <span class="nav-text">中止退出</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JPEG解压缩具体细节"><span class="nav-number">2.3.</span> <span class="nav-text">JPEG解压缩具体细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分配和初始化JPEG解压缩对象"><span class="nav-number">2.3.1.</span> <span class="nav-text">分配和初始化JPEG解压缩对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指定压缩数据的来源（例如一个文件）"><span class="nav-number">2.3.2.</span> <span class="nav-text">指定压缩数据的来源（例如一个文件）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用jpeg-read-header-获得图片的信息"><span class="nav-number">2.3.3.</span> <span class="nav-text">调用jpeg_read_header()获得图片的信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置解压缩参数"><span class="nav-number">2.3.4.</span> <span class="nav-text">设置解压缩参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开始解压缩：jpeg-start-decompress"><span class="nav-number">2.3.5.</span> <span class="nav-text">开始解压缩：jpeg_start_decompress()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解压缩循环操作"><span class="nav-number">2.3.6.</span> <span class="nav-text">解压缩循环操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结束解压缩：jpeg-finish-decompress"><span class="nav-number">2.3.7.</span> <span class="nav-text">结束解压缩：jpeg_finish_decompress()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#释放JPEG解压缩对象"><span class="nav-number">2.3.8.</span> <span class="nav-text">释放JPEG解压缩对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中止退出-1"><span class="nav-number">2.3.9.</span> <span class="nav-text">中止退出</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他"><span class="nav-number">3.</span> <span class="nav-text">其他</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gaox</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zhejiangblue"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('footer')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js?v=5.1.0"></script>
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OhVoAvGprlcQcE874iz42HN5-gzGzoHsz", "HYUlzEMlDdpDTLpJ4Ll67Daj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

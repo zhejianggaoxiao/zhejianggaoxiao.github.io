@@ -1,0 +1,1194 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="makefile," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="这篇文档主要是用作《跟我一起写Makefile》教程的笔记，不会面面俱到，只记录关键点。
+&amp;lt;!—more—&amp;gt;
+[TOC]
+概述
+makefile的最大优点——自动化编译
+make是一个命令工具，是一个解释makefile中指令的命令工具
+
+程序的编译与链接
+编译(compile)：由源文件生成目标文件(.o)，只要求
+语法正确
+函数和变量的声明正确（需要告诉编译器头文件的位置）
+
+
+链">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Makefile学习笔记">
+<meta property="og:url" content="http://yoursite.com/2017/03/06/Makefile学习笔记/index.html">
+<meta property="og:site_name" content="Who are you?">
+<meta property="og:description" content="这篇文档主要是用作《跟我一起写Makefile》教程的笔记，不会面面俱到，只记录关键点。
+&amp;lt;!—more—&amp;gt;
+[TOC]
+概述
+makefile的最大优点——自动化编译
+make是一个命令工具，是一个解释makefile中指令的命令工具
+
+程序的编译与链接
+编译(compile)：由源文件生成目标文件(.o)，只要求
+语法正确
+函数和变量的声明正确（需要告诉编译器头文件的位置）
+
+
+链">
+<meta property="og:updated_time" content="2017-03-06T07:45:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Makefile学习笔记">
+<meta name="twitter:description" content="这篇文档主要是用作《跟我一起写Makefile》教程的笔记，不会面面俱到，只记录关键点。
+&amp;lt;!—more—&amp;gt;
+[TOC]
+概述
+makefile的最大优点——自动化编译
+make是一个命令工具，是一个解释makefile中指令的命令工具
+
+程序的编译与链接
+编译(compile)：由源文件生成目标文件(.o)，只要求
+语法正确
+函数和变量的声明正确（需要告诉编译器头文件的位置）
+
+
+链">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6384644433400301000',
+      author: 'xoaG'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/06/Makefile学习笔记/"/>
+
+
+
+
+
+  <title> Makefile学习笔记 | Who are you? </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a7a0c4c8a6ef4131e469f6d4b9dd315c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Who are you?</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Why are you ?</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/06/Makefile学习笔记/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Gaox">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar/boy.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Who are you?">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Who are you?" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Makefile学习笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-06T22:43:46+08:00">
+                2017-03-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ubuntu/" itemprop="url" rel="index">
+                    <span itemprop="name">ubuntu</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/06/Makefile学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/06/Makefile学习笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/03/06/Makefile学习笔记/" class="leancloud_visitors" data-flag-title="Makefile学习笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇文档主要是用作《跟我一起写Makefile》教程的笔记，不会面面俱到，只记录关键点。</p>
+<p>&lt;!—more—&gt;</p>
+<p>[TOC]</p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><ul>
+<li>makefile的最大优点——自动化编译</li>
+<li>make是一个命令工具，是一个解释makefile中指令的命令工具</li>
+</ul>
+<h2 id="程序的编译与链接"><a href="#程序的编译与链接" class="headerlink" title="程序的编译与链接"></a>程序的编译与链接</h2><ol>
+<li>编译(compile)：由源文件生成目标文件(.o)，只要求<ul>
+<li>语法正确</li>
+<li>函数和变量的声明正确（需要告诉编译器头文件的位置）</li>
+</ul>
+</li>
+<li>链接(link)：使用中间目标文件生成应用程序，也就是可执行文件<ul>
+<li>主要链接函数和全局变量，也就是要在目标文件中寻找函数的实现</li>
+<li>一般情况下，我们都会对中间目标文件进行打包，在windows下形成库文件（library file），也就是<code>.lib</code>文件，而在linux下是Archive File，后缀为<code>.a</code>文件。</li>
+</ul>
+</li>
+</ol>
+<h1 id="Makefile简介"><a href="#Makefile简介" class="headerlink" title="Makefile简介"></a>Makefile简介</h1><ul>
+<li>make命令执行，需要有一个makefile文件</li>
+</ul>
+<h2 id="makefile规则"><a href="#makefile规则" class="headerlink" title="makefile规则"></a>makefile规则</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">target ... : prerequisites ... </div><div class="line">	command ... ...</div></pre></td></tr></table></figure>
+<ul>
+<li>target ：可以是一个object ﬁle（目标文件）， 也可以是一个执行文件， 还可以是一个标签 （label）。</li>
+<li>prerequisites ：生成该target所依赖的文件和/或target</li>
+<li>command：该target要执行的命令（任意的shell命令）</li>
+</ul>
+<p>简言之：<code>prerequisites中如果有一个以上的文件比target文件要新的话，command所定义的命令就会被执行。</code></p>
+<h2 id="makefile示例"><a href="#makefile示例" class="headerlink" title="makefile示例"></a>makefile示例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">edit : main.o kbd.o command.o display.o \ </div><div class="line">        insert.o search.o files.o utils.o </div><div class="line">	cc -o edit main.o kbd.o command.o display.o \ </div><div class="line">	     insert.o search.o files.o utils.o</div><div class="line"></div><div class="line">main.o : main.c defs.h</div><div class="line">	cc -c main.c </div><div class="line">kbd.o : kbd.c defs.h command.h</div><div class="line">	cc -c kbd.c </div><div class="line">command.o : command.c defs.h command.h</div><div class="line">	cc -c command.c </div><div class="line">display.o : display.c defs.h buffer.h</div><div class="line">	cc -c display.c </div><div class="line">insert.o : insert.c defs.h buffer.h</div><div class="line">	cc -c insert.c </div><div class="line">search.o : search.c defs.h buffer.h</div><div class="line">	cc -c search.c </div><div class="line">files.o : files.c defs.h buffer.h command.h</div><div class="line">	cc -c files.c </div><div class="line">utils.o : utils.c defs.h</div><div class="line">	cc -c utils.c </div><div class="line">clean : </div><div class="line">	rm edit main.o kbd.o command.o display.o \ </div><div class="line">       insert.o search.o files.o utils.o</div></pre></td></tr></table></figure>
+<p>几个注意点：</p>
+<ul>
+<li>反斜杠(\)是换行符</li>
+<li>在定义好依赖关系后，后续的那一行定义了如何生成目标文件的操作系统命令，<strong>一定要以一个 Tab 键作为开头</strong>。</li>
+<li>clean只是一个label，make不会自动执行其后的命令，这样的方法非常有用，我们可以在一个makeﬁle中定义不用的编译或是和编译无关的命令，如打包备份等</li>
+<li>工作流程<ol>
+<li>make会在当前目录下找名字叫“Makeﬁle”或“makeﬁle”的文件。</li>
+<li>如果找到， 它会找文件中的第一个目标文件（target）， 在上面的例子中， 他会找 到“edit”这个文件，并把这个文件作为最终的目标文件。</li>
+<li>如果edit文件不存在，或是edit所依赖的后面的 .o 文件的文件修改时间要比 edit 这个文 件新，那么，他就会执行后面所定义的命令来生成 edit 这个文件。</li>
+<li>如果 edit 所依赖的 .o 文件也不存在，那么make会在当前文件中找目标为 .o 文件的依 赖性，如果找到则再根据那一个规则生成 .o 文件。（这有点像一个堆栈的过程）</li>
+<li>当然，你的C文件和H文件是存在的啦，于是make会生成 .o 文件，然后再用 .o 文件生 成make的终极任务，也就是执行文件 edit 了。</li>
+</ol>
+</li>
+<li>make对于所定义的命令的错误，或是编译不成功，不会报错，只有依赖文件找不到时才会报错</li>
+</ul>
+<h2 id="Makefile中使用变量"><a href="#Makefile中使用变量" class="headerlink" title="Makefile中使用变量"></a>Makefile中使用变量</h2><p>对于重复的<code>字符串</code>，我们可以使用变量避免重复书写。makeﬁle的变量也就是一个字符串，理解成C语言中的宏可能会更好。</p>
+<ol>
+<li><p>变量定义：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">objects = main.o kbd.o command.o display.o \ </div><div class="line">      insert.o search.o files.o utils.o</div></pre></td></tr></table></figure>
+</li>
+<li><p>变量使用：<code>$(objects)</code></p>
+</li>
+</ol>
+<h2 id="Makefile自动推导"><a href="#Makefile自动推导" class="headerlink" title="Makefile自动推导"></a>Makefile自动推导</h2><p>GNU的make很强大，它可以自动推导文件以及文件依赖关系后面的命令。</p>
+<p>只要make看到一个 .o 文件， 它就会自动的把 .c 文件加在依赖关系中， 如果make找到 一个 whatever.o ， 那么 whatever.c 就会是 whatever.o 的依赖文件，并且 cc -c whatever.c 也会被推导出来，因而上面命令可以写为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">objects = main.o kbd.o command.o display.o \ </div><div class="line">      insert.o search.o files.o utils.o</div><div class="line"></div><div class="line">edit : $(objects) </div><div class="line">	cc -o edit $(objects)</div><div class="line"></div><div class="line">main.o : defs.h </div><div class="line">kbd.o : defs.h command.h </div><div class="line">command.o : defs.h command.h </div><div class="line">display.o : defs.h buffer.h </div><div class="line">insert.o : defs.h buffer.h </div><div class="line">search.o : defs.h buffer.h</div><div class="line">files.o : defs.h buffer.h command.h </div><div class="line">utils.o : defs.h</div><div class="line"></div><div class="line">.PHONY : clean </div><div class="line">clean : </div><div class="line">	rm edit $(objects)</div></pre></td></tr></table></figure>
+<p>也就是：对应于目标文件的源文件以及相应的编译命令<code>cc -c</code>都不需要显式写出。这就是所谓的<strong>隐晦规则</strong>。</p>
+<h2 id="清空目标文件的规则"><a href="#清空目标文件的规则" class="headerlink" title="清空目标文件的规则"></a>清空目标文件的规则</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.PHONY : clean </div><div class="line">clean : </div><div class="line">	-rm edit $(objects)</div></pre></td></tr></table></figure>
+<ul>
+<li><code>.PHONY</code>表示clean是一个伪目标文件</li>
+<li>在 rm 命令前面加了一个小减号的意思 就是， 也许某些文件出现问题， 但不要管， 继续做后面的事。</li>
+<li>“clean从来都是放在文件的最后”</li>
+</ul>
+<h2 id="makefile包含内容"><a href="#makefile包含内容" class="headerlink" title="makefile包含内容"></a>makefile包含内容</h2><ol>
+<li>显式规则。显式规则说明了如何生成一个或多个目标文件。这是由Makeﬁle的书写者明显 指出要生成的文件、文件的依赖文件和生成的命令。</li>
+<li>隐晦规则。由于我们的make有自动推导的功能，所以隐晦的规则可以让我们比较简略地 书写Makeﬁle，这是由make所支持的。</li>
+<li>变量的定义。在Makeﬁle中我们要定义一系列的变量，变量一般都是字符串，这个有点像 你C语言中的宏，当Makeﬁle被执行时，其中的变量都会被扩展到相应的引用位置上。</li>
+<li>文件指示。其包括了三个部分，一个是在一个Makeﬁle中引用另一个Makeﬁle，就像C语言 中的include一样；另一个是指根据某些情况指定Makeﬁle中的有效部分，就像C语言中的 预编译#if一样；还有就是定义一个多行的命令。</li>
+<li>注释。Makeﬁle中只有行注释， 和UNIX的Shell脚本一样， 其注释是用 # 字符， 这个就 像C/C++中的 // 一样。 如果你要在你的Makeﬁle中使用 # 字符， 可以用反斜框进行转 义，如： # 。</li>
+</ol>
+<h2 id="Makefile文件名"><a href="#Makefile文件名" class="headerlink" title="Makefile文件名"></a>Makefile文件名</h2><ul>
+<li>建议使用Makefile这个作为文件名</li>
+<li>可 以 使 用 别 的 文 件 名 来 书 写Makeﬁle， 比如：“Make.Linux”，等 ， 如 果 要 指 定 特定的Makeﬁle， 你可以使用make的<code>-f</code>和<code>—file</code> 参数，如： <code>make -f Make.Linux</code> 或<code>make --file Make.AIX</code></li>
+</ul>
+<h2 id="引用其他Makefile"><a href="#引用其他Makefile" class="headerlink" title="引用其他Makefile"></a>引用其他Makefile</h2><ol>
+<li>语法：<code>include filename</code></li>
+<li>注意点：<ul>
+<li>filename 可以是当前操作系统Shell的文件模式（可以包含路径和通配符）</li>
+<li>如果文件都没有指定绝对路径或是相对路径的话，make会 在当前目录下首先寻找，如果当前目录下没有找到，那么，make还会在下面的几个目录下找：<ul>
+<li>如果make执行时，有 -I 或 –include-dir 参数，那么make就会在这个参数所指定的 目录下去寻找。</li>
+<li>如果目录 \<prefix\>/include （一般是： /usr/local/bin 或 /usr/include ）存 在的话，make也会去找。</prefix\></li>
+</ul>
+</li>
+<li><code>-include &lt;filename&gt;</code>：无论include过程中出现什么错误，都不要报错继续执行。</li>
+</ul>
+</li>
+</ol>
+<h2 id="Make工作方式"><a href="#Make工作方式" class="headerlink" title="Make工作方式"></a>Make工作方式</h2><ol>
+<li>读入所有的Makeﬁle。</li>
+<li>读入被include的其它Makeﬁle。 </li>
+<li>初始化文件中的变量。</li>
+<li>推导隐晦规则，并分析所有规则。 </li>
+<li>为所有的目标文件创建依赖关系链。 </li>
+<li>根据依赖关系，决定哪些目标要重新生成。 </li>
+<li>执行生成命令。</li>
+</ol>
+<h1 id="书写规则"><a href="#书写规则" class="headerlink" title="书写规则"></a>书写规则</h1><p>参考：<a href="https://github.com/seisman/how-to-write-makefile" target="_blank" rel="external">跟我一起写Makefile</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/makefile/" rel="tag"># makefile</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/05/Linux环境变量及编译器库路径/" rel="next" title="Linux环境变量及编译器库路径">
+                <i class="fa fa-chevron-left"></i> Linux环境变量及编译器库路径
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/07/Linux编译器学习/" rel="prev" title="Linux编译器学习">
+                Linux编译器学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/03/06/Makefile学习笔记/"
+     data-title="Makefile学习笔记"
+     data-content=""
+     data-url="http://yoursite.com/2017/03/06/Makefile学习笔记/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/06/Makefile学习笔记/"
+           data-title="Makefile学习笔记" data-url="http://yoursite.com/2017/03/06/Makefile学习笔记/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar/boy.png"
+               alt="Gaox" />
+          <p class="site-author-name" itemprop="name">Gaox</p>
+          <p class="site-description motion-element" itemprop="description">这是一个小子的个人blog，嗯，没啥会的~</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhejianggaoxiao" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://zhihu.com/people/zhejianggaoxiao" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/zhejiangblue" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://music.163.com/#/user/home?id=35617743" target="_blank" title="网易云">
+                  
+                    <i class="fa fa-fw fa-music"></i>
+                  
+                  网易云
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#程序的编译与链接"><span class="nav-number">1.1.</span> <span class="nav-text">程序的编译与链接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Makefile简介"><span class="nav-number">2.</span> <span class="nav-text">Makefile简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#makefile规则"><span class="nav-number">2.1.</span> <span class="nav-text">makefile规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#makefile示例"><span class="nav-number">2.2.</span> <span class="nav-text">makefile示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile中使用变量"><span class="nav-number">2.3.</span> <span class="nav-text">Makefile中使用变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile自动推导"><span class="nav-number">2.4.</span> <span class="nav-text">Makefile自动推导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#清空目标文件的规则"><span class="nav-number">2.5.</span> <span class="nav-text">清空目标文件的规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#makefile包含内容"><span class="nav-number">2.6.</span> <span class="nav-text">makefile包含内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile文件名"><span class="nav-number">2.7.</span> <span class="nav-text">Makefile文件名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用其他Makefile"><span class="nav-number">2.8.</span> <span class="nav-text">引用其他Makefile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Make工作方式"><span class="nav-number">2.9.</span> <span class="nav-text">Make工作方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#书写规则"><span class="nav-number">3.</span> <span class="nav-text">书写规则</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gaox</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zhejiangblue"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('footer')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js?v=5.1.0"></script>
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OhVoAvGprlcQcE874iz42HN5-gzGzoHsz", "HYUlzEMlDdpDTLpJ4Ll67Daj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>
